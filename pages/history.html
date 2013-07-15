@@ -1,0 +1,21 @@
+<template name="history">
+	<h1>History of your work. <small>Select date and you will see your work.</small></h1>
+	<div class="input-append date date-day" data-date="{{dayHistory}}" data-date-format="{{dateFormatLower}}">
+		<label for="">Show tasks by <strong>day</strong>:</label> <input class="span2" size="16" type="text" value="{{dayHistory}}" placeholder="select day">
+		<span class="add-on"><i class="icon-th"></i></span>
+	</div>
+
+	&nbsp;
+
+	<div class="input-append date date-month" data-date="{{monthHistory}}" data-date-format="{{dateFormatLower}}" data-date-viewmode="months">
+		<label for="">Show tasks by <strong>month</strong>:</label><input class="span2" size="16" type="text" value="{{monthHistory}}" placeholder="select month">
+		<span class="add-on"><i class="icon-th"></i></span>
+	</div>
+
+	{{#unless tasksHistory}}
+		{{#if dayHistory}}<p>You did nothing on {{dayHistory}}</p>{{/if}}
+		{{#if monthHistory}}<p>You did nothing on {{monthHistory}}</p>{{/if}}
+	{{/unless}}
+
+	{{{tasksHistory}}}
+</template>

@@ -1,0 +1,31 @@
+<template name="tasks">
+	<h1>Manage your tasks</h1>
+	<div class="tasks">
+		<div class="clearfix">
+			<div class="todo-all">
+				<div><h2>TODO all ({{userAllTasksCount}}) | <a href="/tasks/new">Add</a></h2></div>
+				{{#if tasks.count}}
+					{{{taskList tasks}}}
+				{{else}}
+					<p>You don't have tasks. <a href="/tasks/new">Add one!</a></p>
+				{{/if}}
+			</div>
+			<div class="todo-today">
+				<div><h2>TODO today ({{userTodayTasksCount}}) | <a href="/tasks/new?group=today">Add</a></h2></div>
+				{{#if todayTasks.count}}
+					{{{taskList todayTasks}}}
+				{{else}}
+					<p>You don't have tasks for today. Enjoy your free day!</p>
+				{{/if}}
+			</div>
+		</div>
+		<div class="clearfix">
+			<h2>Done tasks</h2>
+			{{#if doneTasks.count}}
+				{{{taskList doneTasks}}}
+			{{else}}
+				<p>You did not complete any task yet! GO GO GO!</p>
+			{{/if}}
+		</div>
+	</div>
+</template>

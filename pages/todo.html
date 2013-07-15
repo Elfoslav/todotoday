@@ -1,0 +1,14 @@
+<template name="todo">
+	<h1>Improve TodoToday</h1>
+	<p>Do you miss something or you don't like something?</p>
+	<form id="todo-form" class="form-inline">
+		<label>Just write it into TodoToday's TODO list:</label>
+		<input type="text" id="message" name="todo" placeholder="What do you want to improve?" />
+		<input type="submit" name="submit" id="add-todo-submit" value="Submit" />
+	</form>
+	<ul>
+		<li>Better aranged history of tasks and task times.</li>
+		<li>Ability to search tasks.</li>
+		{{todos}}
+	</ul>
+</template>

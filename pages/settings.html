@@ -1,0 +1,16 @@
+<template name="settings">
+	<h1>Settings</h1>
+	<form>
+		<label for=date-format">Date format</label>
+		<select id="date-format" name="dateFormat">
+			<option value="dd.mm.yyyy" {{isEqual dateFormat "DD.MM.YYYY" 'selected'}}>dd.mm.yyyy</option>
+			<option value="mm.dd.yyyy" {{isEqual dateFormat "MM.DD.YYYY" 'selected'}}>mm.dd.yyyy</option>
+			<option value="dd/mm/yyyy" {{isEqual dateFormat "DD/MM/YYYY" 'selected'}}>dd/mm/yyyy</option>
+			<option value="mm/dd/yyyy" {{isEqual dateFormat "MM/DD/YYYY" 'selected'}}>mm/dd/yyyy</option>
+		</select>
+		<span>eg.: {{dateFormatExample}}</span>
+		<div>
+			<input type="submit" id="submit" value="Save" />
+		</div>
+	</form>
+</template>

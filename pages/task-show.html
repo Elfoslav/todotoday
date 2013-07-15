@@ -1,0 +1,45 @@
+<template name="showTask">
+  {{#with task}}
+	<div class="clearfix">
+	  <h1 class="pull-left">Task: {{name}}</h1>
+	</div>
+	{{#if done}}
+	  <p class="label label-success"><i class="icon-ok"></i> Done</p>
+	{{else}}
+	  <p>
+		{{#if doing}}
+		  <button class="btn btn-danger" data-action="stopdoing" data-id="{{_id}}">Stop doing</button>
+		{{else}}
+		  <button class="btn btn-primary"data-action="startdoing" data-id="{{_id}}">Start doing</button>
+		{{/if}}
+	  </p>
+	{{/if}}
+	<p>Time spent: {{timeSpent _id}}</p>
+	<p><b>Description:</b> {{showDescription description}}</p>
+	{{#if dueDate}}<p>Due date: {{moment dueDate}}</p>{{/if}}
+	{{#if doneTime}}<p>Done at: {{doneTime}}</p>{{/if}}
+	{{#if estimatedTime}}<p>Estimated time: {{estimatedTime}} h</p>{{/if}}
+	<div class="btn-group">
+	  {{> actionButtons }}
+	</div>
+  {{/with}}
+
+  <h2>History - when I worked on this task:</h2>
+  <!--
+  <form class="form-inline" action="">
+	<input type="text" name="start" placeholder="Start date-time" />
+	<input type="text" name="end" placeholder="End date-time" />
+	<input type="submit" value="Save" />
+  </form> -->
+  {{{taskTimes task._id}}}
+</template>
+
+<template name="actionButtons">
+  {{#if done}}
+	<button class="btn" data-action="undone" data-id="{{_id}}" title="Mark as undone"><i class="icon-repeat"></i></button>
+  {{else}}
+	<button class="btn" data-action="done" data-id="{{_id}}" title="Mark as done"><i class="icon-ok"></i></button>
+  {{/if}}
+  <a href="/tasks/edit/{{_id}}?source=task&id={{_id}}" class="btn" title="edit"><i class="icon-pencil"></i></a>
+  <button class="btn" data-action="delete" data-id="{{_id}}" title="delete"><i class="icon-remove"></i></button>
+</template>

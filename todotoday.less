@@ -1,0 +1,69 @@
+/* CSS declarations go here */
+
+.todo-all, .todo-today {
+	width: 47%;
+	text-align: center;
+}
+.todo-all {
+	float: left;
+}
+.todo-today {
+	float: right;
+}
+.move-selected {
+	float: left;
+	position: relative;
+	height: 100%;
+	width: 20%;
+	text-align: center;
+	.arrows {
+		font-size: 2em;
+		a {
+			display: block;
+		}
+		a:hover {
+			color: green;
+			background: #eee;
+			text-decoration: none;
+		}
+	}
+	.inner {
+		vertical-align: middle;
+	}
+}
+.tasks {
+	position: relative;
+	.task-name {
+		width: 80%;
+	}
+}
+a [class^="icon-"]:before, [class*=" icon-"]:before {
+	cursor: pointer;
+}
+.icon-ok {
+	color: green;
+}
+.icon-remove {
+	color: red;
+}
+.footer {
+	margin-top: 20px;
+	text-align: center;
+}
+.task-name {
+	font-size: 1.6em;
+	line-height: 1.6em;
+}
+.task-day {
+	font-size: 1.2em;
+	line-height: 1.2em;
+}
+
+.hide {
+	display: none !important;
+}
+
+/** bootstrap addon **/
+.table tbody tr.info > th {
+	background-color: #d9edf7;
+}
