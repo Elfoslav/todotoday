@@ -1,5 +1,5 @@
 Template.todo.rendered = function() {
-	Meteor.call('changePageTitle', "What to do in TodoToday");
+	Meteor.call('changePageTitle', "Improve TodoToday");
 	triggerAnalytics();
 };
 

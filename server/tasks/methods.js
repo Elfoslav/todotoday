@@ -41,35 +41,35 @@ Meteor.methods({
 			});
 		}
 		Tasks.update(id, { $set : { doing: true }});
+		return new Date();
 	},
 	stopDoing: function(id) {
 		currUserTask = CurrentUserTask.findOne({ task : id });
 
 		if(currUserTask) {
 			CurrentUserTask.remove({ task : id });
-			Tasks.update(id,
-				{
-					$addToSet : {
-						taskTimes: {
-							start: currUserTask.start,
-							end: new Date()
-						}
-					}
-				}
-			);
+			TaskTimes.insert({
+				task : id,
+				user : this.userId,
+				start: currUserTask.start,
+				end: new Date()
+			});
 		}
 		Tasks.update(id, { $set : { doing: false }});
+		return new Date();
 	},
 	getTotalTaskTime: function(id) {
 		task = Tasks.findOne(id);
 		if(!task) {
 			throw new Meteor.Error(404, 'Task not found');
 		}
-		taskTimes = task.taskTimes;
+		var taskTimes = TaskTimes.find({
+			task : id
+		});
 		totalTime = 0;
 		if(taskTimes) {
-			taskTimes.forEach(function(task) {
-				totalTime += task.end - task.start;
+			taskTimes.forEach(function(taskTime) {
+				//totalTime += taskTime.end - taskTime.start;
 			});
 		}
 
@@ -80,17 +80,26 @@ Meteor.methods({
 		}
 		return totalTime;
 	},
-	saveTaskTime : function(taskId, taskTimeData) {
+	insertTaskTime : function(taskId, start, end) {
+		if(!(taskId && start && end)) {
+			throw new Meteor.Error(500, 'Missing "taskId" or "start" or "end" parameter');
+		}
+		TaskTimes.insert({
+			task : taskId,
+			user : this.userId,
+			start : start,
+			end : end
+		});
+	},
+	updateTaskTime : function(taskId, taskTimeData) {
 		if(!(taskTimeData.id && taskTimeData.start && taskTimeData.end)) {
 			throw new Meteor.Error(500, 'Missing one of taskTimeData (id, start, end)');
 		}
-		console.log('TaskTimeData: ', taskTimeData);
-		var startTimeSelector = "taskTimes." + taskTimeData.id + ".start";
-		var endTimeSelector = "taskTimes." + taskTimeData.id + ".end";
-		//programatically creating $set modifier object
-		var setModifier = { $set : {} };
-		setModifier.$set[startTimeSelector] = taskTimeData.start;
-		setModifier.$set[endTimeSelector] = taskTimeData.end;
-		Tasks.update(taskId, setModifier);
+		TaskTimes.update(taskTimeData.id, {
+			$set : {
+				start : taskTimeData.start,
+				end : taskTimeData.end
+			}
+		});
 	}
 });

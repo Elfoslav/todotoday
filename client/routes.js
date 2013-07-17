@@ -72,6 +72,9 @@ Meteor.Router.add({
   },
 
   '/todo' : function() {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
 	return 'todo';
   },
 

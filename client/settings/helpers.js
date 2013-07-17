@@ -4,19 +4,17 @@ Template.settings.rendered = function() {
 
 Template.settings.helpers({
 	dateFormatExample : function() {
-		var defaultFormat = getDefaultFormat();
+		var defaultFormat = getDefaultDateFormat();
 		return Session.get('dateFormatExample') ? Session.get('dateFormatExample') : moment().format(defaultFormat);
 	},
+	timeFormatExample : function() {
+		var defaultFormat = getDefaultTimeFormat();
+		return Session.get('timeFormatExample') ? Session.get('timeFormatExample') : moment().format(defaultFormat);
+	},
 	dateFormat : function() {
-		return getDefaultFormat();
+		return getDefaultDateFormat();
+	},
+	timeFormat : function() {
+		return getTimePickerTimeFormat(getDefaultTimeFormat());
 	}
 });
-
-function getDefaultFormat() {
-	var settings = Settings.findOne( { user : Meteor.userId() });
-	var defaultFormat = 'DD.MM.YYYY';
-	if(settings && settings.dateFormat) {
-		defaultFormat = settings.dateFormat;
-	}
-	return defaultFormat;
-}

@@ -29,7 +29,10 @@
 
 	{{> flashMessage }}
 
-	<p>All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}</p>
+	<p>
+		All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}
+		{{#if currentTask}}| {{currentTask}} {{/if}}
+	</p>
 
 	{{#isolate}} {{renderPage}} {{/isolate}}
   </div>

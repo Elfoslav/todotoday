@@ -188,14 +188,12 @@ computeDuration = function (duration) {
 	//moment duration
 	var mDuration = moment.duration(duration);
 	var out = '';
-	if(mDuration.days() > 0) {
-		out += mDuration.days() + 'd, ';
-	}
 	if(mDuration.hours() > 0) {
-		out += mDuration.hours() + ((mDuration.minutes() > 0) ? 'h, ' : 'h');
+		var hours = mDuration.hours() + 24* mDuration.days();
+		out += hours + ((mDuration.minutes() > 0) ? 'h, ' : 'h ');
 	}
 	if(mDuration.minutes() > 0) {
-		out += mDuration.minutes() + ((mDuration.seconds() > 0) ? 'm, ' : 'm');
+		out += mDuration.minutes() + ((mDuration.seconds() > 0) ? 'm, ' : 'm ');
 	}
 	if(mDuration.seconds() > 0) {
 		out += mDuration.seconds() + 's';
@@ -211,82 +209,100 @@ computeDuration = function (duration) {
 printTaskTimes = function(task, view) {
 	var out = '';
 	var lastDate = null;
-	if(task && task.taskTimes) {
-		var sorted = task.taskTimes.sort(sortTaskTimes);
-		var taskTimesData = filterTaskTimesByDate(sorted);
-		for(var key in taskTimesData) {
-			out += '<h3 class="task-day">' + moment(key, Session.get('dateFormat')).format('dddd MMMM DD, YYYY') + '</h3>'
-			if(taskTimesData[key].taskTimes){
-				var totalCount = taskTimesData[key].taskTimes.length;
-				var totalDuration = 0;
-				var counter = 0;
-				var timeFormat = 'hh:mm:ss a';
-				taskTimesData[key].taskTimes.forEach(function(taskTime) {
-					counter++;
-					totalDuration += taskTime.end - taskTime.start;
-					var duration = taskTime.end - taskTime.start;
-					var startTime = moment(taskTime.start);
-					var endTime = moment(taskTime.end);
-					var startTimeFormat = startTime.format(timeFormat);
-					var startDateTime = startTime.format(Session.get('dateFormat') + ' ' + timeFormat);
-					var endTimeFormat = endTime.format(timeFormat);
-					var endDateTime = endTime.format(Session.get('dateFormat') + ' ' + timeFormat);
-					if(startTime.day() !== endTime.day()) {
-						startTimeFormat = startTime.format('ddd hh:mm:ss a');
-						endTimeFormat = endTime.format('ddd hh:mm:ss a');
-					}
-					out += '<p><strong>Start:</strong> ' + startTimeFormat + '\
-						<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime.position + '" /> - \
-						<strong>End:</strong> '+ endTimeFormat + '\
-						<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime.position + '" />\
-						| <strong>Duration:</strong>  ' + computeDuration(duration);
-					if(view !== 'historyView') {
-						out += ', <a href="#edit" data-action="edit-tasktime" data-id="' + taskTime.position + '">Edit</a>\
-							<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime.position + '" data-task-id="' + task._id + '">Save</a></p>';
-					}
-					if(counter == totalCount) {
-						out += '<p><strong>Total: ' + computeDuration(totalDuration) + '</strong></p>';
-					}
-				});
+	var taskTimes = TaskTimes.find({ 'task' : task._id }, { sort : { start: 1 }}).fetch();
+	if(task && taskTimes) {
+		var totalDuration = 0;
+		var dayDuration = 0;
+		var timesCount = taskTimes.length;
+		var counter = 0;
+		var day = null;
+		var timeFormat = Session.get('timeFormat');
+		var format = 'dddd MMM DD, YYYY';
+		taskTimes.forEach(function(taskTime) {
+			counter++;
+			var nextTaskTime = taskTimes[counter];
+			var currentDay = moment(taskTime.start).format(format);
+			var duration = taskTime.end - taskTime.start;
+			totalDuration += duration;
+			dayDuration += duration;
+			var startTime = moment(taskTime.start);
+			var endTime = moment(taskTime.end);
+			var startTimeFormat = startTime.format(timeFormat);
+			var startDateTime = startTime.format(getMomentDateTimeFormat());
+			var endTimeFormat = endTime.format(timeFormat);
+			var endDateTime = endTime.format(getMomentDateTimeFormat());
+			if(startTime.day() !== endTime.day()) {
+				startTimeFormat = startTime.format('ddd ' + timeFormat);
+				endTimeFormat = endTime.format('ddd ' + timeFormat);
 			}
-		}
+			if(day !== currentDay) {
+				//print new day
+				out += '<h3>' + currentDay + '</h3>';
+			}
+			out += '<p><strong>Start:</strong> ' + startTimeFormat + '\
+				<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
+				<strong>End:</strong> '+ endTimeFormat + '\
+				<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
+				| <strong>Duration:</strong>  ' + computeDuration(duration);
+			if(view == 'taskView') {
+				out += ', <a href="#edit" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
+					<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a></p>';
+			}
+			day = currentDay;
+			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
+			if(nextTaskDay !== day) {
+				out += '<p><strong>Total: ' + computeDuration(dayDuration) + '</strong></p>';
+				dayDuration = 0;
+			}
+			if(timesCount == counter) {
+				out += '<h3>Total: ' + computeDuration(totalDuration) + '</h3>';
+			}
+		});
 	}
 	return out;
 }
 
 /**
- * @param tasks
- * @param string time format
- * @returns string of history tasks or empty string if no tasks found
+ * @param array taskTimes
+ * @returns string of history tasks or empty string
  */
-printTasksHistory = function(tasks, timeFormat) {
+printTasksHistory = function(taskTimes) {
 	var out = '';
-	var dateTimeFormat = timeFormat || 'hh:mm:ss a';
-	if(tasks && tasks.length) {
+	if(taskTimes.length) {
+		var day = null;
 		var totalDuration = 0;
-		tasks.forEach(function(task) {
-			out += '<h2 class="task-name"><a href="/tasks/' + task._id + '">' + task.name + '</a></h2>';
-			if(task.taskTimes) {
-				var taskTotalDuration = 0;
-				var counter = 0;
-				var taskTimesCount = task.taskTimes.length;
-				task.taskTimes.forEach(function(taskTime) {
-					counter++;
-					taskTotalDuration += taskTime.end - taskTime.start;
-
-					var duration = computeDuration(durationMilis);
-					out += '<p><strong>Start:</strong> ' + moment(taskTime.start).format(dateTimeFormat) + ' - <strong>End:</strong> ' + moment(taskTime.end).format(dateTimeFormat) + ' | <strong>Duration:</strong> ' + duration + '</p>';
-					if(counter == taskTimesCount) {
-						out += '<p><strong>Total: ' + computeDuration(taskTotalDuration) + '</strong></p>';
-					}
-				});
-				totalDuration += taskTotalDuration;
+		var totalDayDuration = 0;
+		var counter = 0;
+		var format = 'dddd MMM DD, YYYY';
+		taskTimes.forEach(function(taskTime) {
+			counter++;
+			var nextTaskTime = taskTimes[counter];
+			var currentDay = moment(taskTime.start).format(format);
+			if(day !== currentDay) {
+				//print new day
+				out += '<h3>' + currentDay + '</h3>';
 			}
-			//out += printTaskTimes(task);
+			out += printTaskTime(taskTime);
+			day = currentDay;
+			totalDayDuration += taskTime.end - taskTime.start;
+			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
+			if(nextTaskDay !== day) {
+				out += '<p><strong>Total: ' + computeDuration(totalDayDuration) + '</strong></p>';
+				totalDuration += totalDayDuration;
+				totalDayDuration = 0;
+			}
 		});
-		out += '<h3>Total time spent: ' + computeDuration(totalDuration) + '</h3>';
+		out += '<h3>Total: ' + computeDuration(totalDuration) + '</h3>';
 	}
 	return out;
+};
+
+printTaskTime = function(taskTime) {
+	var start = moment(taskTime.start).format(Session.get('timeFormat'));
+	var end = moment(taskTime.end).format(Session.get('timeFormat'));
+	var duration = taskTime.end - taskTime.start;
+	var task = Tasks.findOne(taskTime.task);
+	return '<p>' + start + ' - ' + end + ', (' + computeDuration(duration) + ') &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
 };
 
 showHideTaskTimeInputs = function(id) {
@@ -312,6 +328,75 @@ sortTasksByTaskTime = function(task1, task2) {
 		return task1.taskTimes[0].start - task2.taskTimes[0].start;
 	}
 	return 0;
+};
+
+/**
+ * @param timeFormat - time format from bootstrap datetimepicker or another plugin
+ * @returns string - time format "hh:mm:ss a" or "HH:mm:ss" or given timeFormat
+ */
+getMomentTimeFormat = function(timeFormat) {
+	switch(timeFormat) {
+		case 'hh:mm:ss' :
+			return 'HH:mm:ss';
+		case 'HH:mm:ss PP' :
+			return 'hh:mm:ss a';
+		case 'hh:mm' :
+			return 'HH:mm';
+		case 'HH:mm PP' :
+			return 'hh:mm a';
+	}
+	return timeFormat;
+};
+
+getMomentDateTimeFormat = function() {
+	return Session.get('dateFormat') + ' ' + Session.get('timeFormat');
+};
+
+getTimePickerTimeFormat = function(timeFormat) {
+	switch(timeFormat) {
+		case 'HH:mm:ss' :
+			return 'hh:mm:ss';
+		case 'hh:mm:ss a' :
+			return 'HH:mm:ss PP';
+		case 'HH:mm' :
+			return 'hh:mm';
+		case 'hh:mm a' :
+			return 'HH:mm PP';
+	}
+	return timeFormat;
+};
+
+getTimePickerDateFormat = function(dateFormat) {
+	var format = dateFormat.replace(/Y/g, 'y').replace(/D/g, 'd');
+	return format;
+};
+
+getTimePickerDateTimeFormat = function(dateFormat, timeFormat) {
+	dateFormat = getTimePickerDateFormat(dateFormat);
+	timeFormat = getTimePickerTimeFormat(timeFormat);
+	return dateFormat + ' ' + timeFormat;
+};
+
+getDefaultDateFormat = function() {
+	var settings = Settings.findOne({ user : Meteor.userId() });
+	var defaultFormat = 'DD.MM.YYYY';
+	if(settings && settings.dateFormat) {
+		defaultFormat = settings.dateFormat;
+	}
+	return defaultFormat;
+};
+
+/**
+ * @returns string - moment time format
+ */
+getDefaultTimeFormat = function() {
+	var settings = Settings.findOne({ user : Meteor.userId() });
+	//moment.js format
+	var defaultFormat = 'hh:mm:ss a';
+	if(settings && settings.timeFormat) {
+		defaultFormat = settings.timeFormat;
+	}
+	return defaultFormat;
 };
 
 triggerAnalytics = function() {

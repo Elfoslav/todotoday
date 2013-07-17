@@ -64,7 +64,6 @@ Template.showTask.helpers({
 		var id = Session.get('currentTaskId');
 		var task = Tasks.findOne(id);
 		Meteor.call('changePageTitle', "Task: " + task.name);
-		//Tasks.update("aj7bgdtpbsxTXEums", { $set : { "taskTimes.1.end" : new Date() } });
 		return task;
 	},
 	moment : function(dateTime) {
@@ -84,27 +83,26 @@ Template.showTask.helpers({
 		if(!task) {
 			throw new Meteor.Error(404, 'Task not found');
 		}
-		taskTimes = task.taskTimes;
 		totalTime = 0;
-
-		if(taskTimes) {
-			//process task times
-			taskTimes.forEach(function(item) {
-				totalTime += item.end - item.start;
-			});
-		}
 
 		if(task.doing) {
 			totalTime = (Session.get('timeSpent')) ? Session.get('timeSpent') : totalTime;
 		}
 		return makeTime(totalTime);
 	},
+	doingFrom : function(taskId) {
+		var currUserTask = CurrentUserTask.findOne({ task : taskId });
+		if(currUserTask) {
+			return moment(currUserTask.start).format(getMomentDateTimeFormat());
+		}
+		return '';
+	},
 	taskTimes : function(taskId) {
 		task = Tasks.findOne(taskId);
 		if(!task) {
 			throw new Meteor.Error(404, 'Task not found');
 		}
-		var out = printTaskTimes(task);
+		var out = printTaskTimes(task, 'taskView');
 		if(out == '') {
 			out = 'You haven\'t worked on this task yet.';
 		}
@@ -112,8 +110,15 @@ Template.showTask.helpers({
 	},
 	showDescription : function(description) {
 		return new Handlebars.SafeString(description.replace(/\n/g, "<br />"));
+	},
+	dateTimeFormat : function() {
+		return getTimePickerDateTimeFormat(Session.get('dateFormat'), Session.get('timeFormat'));
 	}
 });
+
+Template.showTask.rendered = function() {
+	$('#start-time, #end-time, #datetimepicker1').datetimepicker();
+};
 
 /**
  * @param selector
@@ -126,14 +131,6 @@ function initDatepicker(selector) {
 		$(this).datepicker('hide');
 	});
 }
-
-Handlebars.registerHelper('allTasksCount', function() {
-	allTasksCount = Meteor.call('allTasksCount', function(err, data) {
-		Session.set('allTasksCount', data);
-	});
-
-	return Session.get('allTasksCount');
-});
 
 Template.tasks.helpers({
 	tasks : function() {
@@ -201,7 +198,7 @@ Template.tasks.helpers({
 			var doing = task.doing ? '(doing)' : '';
 			var doingClass = task.doing ? 'info' : '';
 			out += '<tr id="'+ task._id + '" class="task-row ' + doingClass + '">';
-			out += '<th title="' + task.description + '" class="task-name"><a href="/tasks/' + task._id + '">' + task.name + '</a> ' + doing + '</th>';
+			out += '<th title="' + task.description + '"><a href="/tasks/' + task._id + '">' + task.name + '</a> ' + doing + '</th>';
 			out += '<td>\
 						' + iconMove + '	\
 					</td>\

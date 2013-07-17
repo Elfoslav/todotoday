@@ -59,6 +59,34 @@ Template.showTask.events({
 		e.preventDefault();
 
 		processTaskAction(e);
+	},
+	'submit #time-form' : function(e) {
+		e.preventDefault();
+		var taskId = Session.get('currentTaskId');
+		var start = $('#start-time-input').val();
+		var end = $('#end-time-input').val();
+		if(!(start && end)) {
+			alert('Fill in start and end time');
+			return;
+		}
+		start = moment(start, getMomentDateTimeFormat()).toDate();
+		console.log('start: ', start);
+		console.log(getMomentDateTimeFormat());
+		end = moment(end, getMomentDateTimeFormat()).toDate();
+		console.log('end: ', end);
+		if((end - start) <= 0) {
+			alert('End time must be greater than start time.');
+			return;
+		}
+		Meteor.call('insertTaskTime', taskId, start, end, function(err, data) {
+			if(!err) {
+				Session.set('flashMessage', 'Task time saved.');
+				$('#start-time-input').val('');
+				$('#end-time-input').val('');
+			} else {
+				Session.set('flashMessage', 'Task time could not be saved. Try again.');
+			}
+		});
 	}
 });
 
@@ -112,6 +140,11 @@ function processTaskAction(e) {
 			break;
 		case 'startdoing' :
 			var taskId = data.id;
+			var currUserTask = CurrentUserTask.findOne({ user : Meteor.userId() });
+			if(currUserTask) {
+				alert('You can\'t work on two tasks simultaneously.');
+				return;
+			}
 			Meteor.call('startDoing', taskId, function(err, data) {
 				if(!err) {
 					console.log('doingIterval: ', app.doingInterval);
@@ -119,6 +152,7 @@ function processTaskAction(e) {
 						app.doingInterval = startTimeSpentInterval(taskId);
 					}
 				}
+				console.log('Server start date: ', data);
 			});
 			break;
 		case 'stopdoing' :
@@ -130,6 +164,7 @@ function processTaskAction(e) {
 						app.doingInterval = null;
 					}
 				}
+				console.log('Server end date: ', data);
 			});
 			break;
 		case 'edit-tasktime' :
@@ -141,7 +176,7 @@ function processTaskAction(e) {
 		case 'save-tasktime' :
 			var $start = $('input[data-type="start"][data-id="' + data.id + '"]');
 			var $end = $('input[data-type="end"][data-id="' + data.id + '"]');
-			var format = Session.get('dateFormat') + ' ' + 'hh:mm:ss a';
+			var format = getMomentDateTimeFormat();
 			var startDate = moment($start.val(), format);
 			var endDate = moment($end.val(), format);
 			if(!startDate.isValid()) {
@@ -165,7 +200,7 @@ function processTaskAction(e) {
 			 * @param taskId
 			 * @param taskTimeId - data.id = taskTime.position
 			 */
-			Meteor.call('saveTaskTime', data.taskId, taskTimeData, function(err, serverData) {
+			Meteor.call('updateTaskTime', data.taskId, taskTimeData, function(err, serverData) {
 				if(!err) {
 					Session.set('flashMessage', 'Task time updated.');
 					$('[data-action][data-id="' + data.id + '"]').removeClass('hide');

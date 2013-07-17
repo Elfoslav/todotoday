@@ -5,6 +5,12 @@ Meteor.publish('userTasks', function() {
 	});
 });
 
+Meteor.publish('taskTimes', function() {
+	return TaskTimes.find({
+		user : this.userId
+	});
+});
+
 Meteor.publish('userSettings', function() {
 	return Settings.find({
 		user : this.userId

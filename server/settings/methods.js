@@ -1,15 +1,18 @@
 Meteor.methods({
-	saveSettings: function(options) {
-		var format = options.dateFormat;
-		var settings = Settings.findOne({ user : this.userId });
-		if(!settings) {
+	saveSettings: function(settings) {
+		var settingsCollection = Settings.findOne({ user : this.userId });
+		if(!settingsCollection) {
 			Settings.insert({
 				user: this.userId,
-				dateFormat: format
+				dateFormat: settings.dateFormat,
+				timeFormat: settings.timeFormat
 			});
 		} else {
-			Settings.update(settings._id,
-				{ $set : { dateFormat : format }}
+			Settings.update(settingsCollection._id,
+				{ $set : {
+					dateFormat : settings.dateFormat,
+					timeFormat : settings.timeFormat
+				}}
 			);
 		}
 		return 'Settings saved';

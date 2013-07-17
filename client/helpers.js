@@ -20,3 +20,20 @@ Handlebars.registerHelper('dateFormatUpper', function() {
 Handlebars.registerHelper('dateFormatLower', function() {
 	return (Session.get('dateFormat')) ? Session.get('dateFormat').toLowerCase() : '';
 });
+
+Handlebars.registerHelper('allTasksCount', function() {
+	allTasksCount = Meteor.call('allTasksCount', function(err, data) {
+		Session.set('allTasksCount', data);
+	});
+
+	return Session.get('allTasksCount');
+});
+
+Handlebars.registerHelper('currentTask', function() {
+	var currUserTask = CurrentUserTask.findOne({ user : Meteor.userId() });
+	if(currUserTask) {
+		var task = Tasks.findOne(currUserTask.task);
+		return new Handlebars.SafeString('Currently working on <a href="/tasks/' + currUserTask.task + '">' + task.name + '</a>');
+	}
+	return '';
+});

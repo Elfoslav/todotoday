@@ -1,25 +1,30 @@
 Meteor.methods({
 	/**
-	 * @param date type of Date
+	 * @param date start of day, eg.: dd.mm.yyyy 00:00:00
+	 * @param date end of day, eg.: dd.mm.yyyy 23:59:59
 	 */
-	getTasksByDate: function(start, end) {
-		var tasks = Tasks.find({
+	getTaskTimesByDate: function(start, end) {
+		var taskTimes = TaskTimes.find({
 			user : this.userId,
-			taskTimes: { $elemMatch: { start: { $gte: start, $lt : end } } }
+			start: { $gte: start, $lte : end }
 		},
 		{
-			sort : { "taskTimes.start" : -1 }
+			sort : { start : 1 }
 		});
-		return tasks.fetch();
+		return taskTimes.fetch();
 	},
 	/**
 	 * @param date first day of month. Eg.: 01.07.2013
+	 * @param date last day of month. Eg.: 31.07.2013
 	 */
-	getTasksByMonth : function(firstDay, lastDay) {
-		var tasks = Tasks.find({
+	getTaskTimesByMonth : function(firstDay, lastDay) {
+		var taskTimes = TaskTimes.find({
 			user : this.userId,
-			taskTimes : { $elemMatch : { start: { $gte: firstDay, $lt : lastDay } } }
+			start: { $gte: firstDay, $lte : lastDay }
+		},
+		{
+			sort : { start : 1 }
 		});
-		return tasks.fetch();
+		return taskTimes.fetch();
 	}
 });

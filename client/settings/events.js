@@ -4,11 +4,20 @@ Template.settings.events({
 		format = format.toUpperCase();
 		Session.set('dateFormatExample', moment().format(format));
 	},
+	'change #time-format' : function(e) {
+		var format = e.currentTarget.value;
+		format = getMomentTimeFormat(format);
+		Session.set('timeFormatExample', moment().format(format));
+	},
 	'click #submit' : function(e) {
 		e.preventDefault();
-		var format = $('#date-format').val();
-		format = format.toUpperCase();
-		Meteor.call('saveSettings', { dateFormat : format }, function(err, data) {
+		var dateFormat = $('#date-format').val().toUpperCase();
+		var timeFormat = getMomentTimeFormat($('#time-format').val());
+		var settings = {
+			dateFormat : dateFormat,
+			timeFormat : timeFormat
+		}
+		Meteor.call('saveSettings', settings, function(err, data) {
 			Session.set('flashMessage', data);
 		});
 	}

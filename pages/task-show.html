@@ -14,7 +14,8 @@
 		{{/if}}
 	  </p>
 	{{/if}}
-	<p>Time spent: {{timeSpent _id}}</p>
+	{{#if doingFrom _id}}<p>Doing from: {{doingFrom _id}}</p>{{/if}}
+	{{#if doingFrom _id}}{{#isolate}}<p>Time spent: {{timeSpent _id}}</p>{{/isolate}}{{/if}}
 	<p><b>Description:</b> {{showDescription description}}</p>
 	{{#if dueDate}}<p>Due date: {{moment dueDate}}</p>{{/if}}
 	{{#if doneTime}}<p>Done at: {{doneTime}}</p>{{/if}}
@@ -25,12 +26,25 @@
   {{/with}}
 
   <h2>History - when I worked on this task:</h2>
-  <!--
-  <form class="form-inline" action="">
-	<input type="text" name="start" placeholder="Start date-time" />
-	<input type="text" name="end" placeholder="End date-time" />
+  <form class="form-inline" id="time-form" action="">
+	<span id="start-time" class="input-append">
+		<input type="text" data-format="{{dateTimeFormat}}" id="start-time-input" name="start" placeholder="Enter start time" />
+		{{#constant}}
+			<span class="add-on">
+				<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+			</span>
+		{{/constant}}
+	</span>
+	<span id="end-time" class="input-append">
+		<input type="text" data-format="{{dateTimeFormat}}" name="end" id="end-time-input" placeholder="Enter end time" />
+		{{#constant}}
+			<span class="add-on">
+				<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+			</span>
+		{{/constant}}
+	</span>
 	<input type="submit" value="Save" />
-  </form> -->
+  </form>
   {{{taskTimes task._id}}}
 </template>
 
