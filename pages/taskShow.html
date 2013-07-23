@@ -20,6 +20,7 @@
 	{{#if dueDate}}<p>Due date: {{moment dueDate}}</p>{{/if}}
 	{{#if doneTime}}<p>Done at: {{doneTime}}</p>{{/if}}
 	{{#if estimatedTime}}<p>Estimated time: {{estimatedTime}} h</p>{{/if}}
+	{{#if project}}<p>Project: {{projectLink project}}</p>{{/if}}
 	<div class="btn-group">
 	  {{> actionButtons }}
 	</div>

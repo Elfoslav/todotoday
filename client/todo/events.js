@@ -19,6 +19,12 @@ Template.todo.events({
 			case 'delete' :
 				Meteor.call('deleteTodo', data.id);
 				break;
+			case 'done' :
+				Meteor.call('doneTodo', data.id);
+				break;
+			case 'undone' :
+				Meteor.call('undoneTodo', data.id);
+				break;
 		}
 	}
 });

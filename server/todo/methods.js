@@ -9,5 +9,19 @@ Meteor.methods({
 	},
 	deleteTodo : function(id) {
 		Todos.remove(id);
+	},
+	doneTodo : function(id) {
+		Todos.update(id, {
+			$set : {
+				done : true
+			}
+		});
+	},
+	undoneTodo : function(id) {
+		Todos.update(id, {
+			$set : {
+				done : false
+			}
+		});
 	}
 });

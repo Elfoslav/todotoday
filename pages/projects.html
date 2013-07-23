@@ -1,0 +1,15 @@
+<template name="projects">
+	<h1>Projects</h1>
+
+	{{#if projects.count}}
+		<table class="table">
+			{{#each projects}}
+				<tr>
+					<td><a href="/projects/{{_id}}">{{name}}</a></td>
+				</tr>
+			{{/each}}
+		</table>
+	{{else}}
+		<p>You don't have any project. <a href="/projects/new">Create one.</a></p>
+	{{/if}}
+</template>

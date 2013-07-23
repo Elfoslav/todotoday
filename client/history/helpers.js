@@ -8,7 +8,7 @@ Template.history.rendered = function() {
 		var lastDay = getEndMonthDate(firstDay);
 		console.log('firstDay: ', firstDay);
 		console.log('lastDay: ', lastDay);
-		Meteor.call('getTaskTimesByMonth', firstDay, lastDay, function(err, taskTimes) {
+		Meteor.call('getTaskTimesByDate', firstDay, lastDay, function(err, taskTimes) {
 			Session.set('tasksHistory', printTasksHistory(taskTimes));
 		});
 		Session.set('monthHistory', date);

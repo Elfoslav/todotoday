@@ -53,3 +53,12 @@ Settings = new Meteor.Collection('settings');
  }
  */
 Todos = new Meteor.Collection('todos');
+
+/**
+ * Projects:
+ * {
+	name : string,
+	user : userId
+ }
+ */
+Projects = new Meteor.Collection('projects');

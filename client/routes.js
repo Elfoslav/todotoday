@@ -6,11 +6,11 @@ Meteor.Router.add({
   '/': function() {
 	return 'home';
   },
+
   '/tasks': function( ){
 	if(Meteor.user() == null) {
 	  return LOGIN_PAGE;
 	}
-	//Session.set('pageTitle', 'Tasks dafuq');
 	return 'tasks';
   },
 
@@ -19,14 +19,6 @@ Meteor.Router.add({
 	  return LOGIN_PAGE;
 	}
 	Session.set('taskAction', 'Add');
-	return 'taskForm';
-  },
-
-  '/tasks/done/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('taskAction', 'Done');
 	return 'taskForm';
   },
 
@@ -53,6 +45,46 @@ Meteor.Router.add({
 	  return NOT_FOUND;
 	}
   },
+
+  '/projects': function( ){
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+	return 'projects';
+  },
+
+  '/projects/:id': function(id) {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+
+	var project = Projects.findOne(id);
+	if(project && project.user == Meteor.userId()) {
+	  // access parameters in order a function args too
+	  Session.set('currentProjectId', id);
+	  return 'projectShow';
+	} else {
+	  return NOT_FOUND;
+	}
+  },
+
+  '/projects/new': function() {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+	Session.set('projectAction', 'Add');
+	return 'projectForm';
+  },
+
+  '/projects/edit/:id': function(id) {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+	Session.set('projectAction', 'Edit');
+	Session.set('projectEditId', id);
+	return 'projectForm';
+  },
+
   '/history' : function() {
 	if(Meteor.user() == null) {
 	  return LOGIN_PAGE;
@@ -91,7 +123,12 @@ Meteor.Router.add({
 Meteor.Router.beforeRouting = function() {
   Session.set('flashMessage', null);
   Session.set('taskEditId', null);
+  Session.set('projectAction', null);
+  Session.set('projectEditId', null);
   Session.set('currentTaskId', null);
+  Session.set('currentProjectId', null);
   Session.set('dateFormatExample', null);
   Session.set('timeSpent', null);
+  Session.set('projectTaskTimes', null);
+  console.log('beforeRouting');
 };

@@ -1,0 +1,25 @@
+<template name="projectForm">
+	<h1>{{projectAction}} project</h1>
+	<form id="projectForm" class="inline-form">
+		<label for="name">Project name *:</label>
+		<input type="text" name="name" id="name" />
+		{{#if tasks}}
+			<h3>Select project tasks:</h3>
+			<table class="table">
+				<tr>
+					<td><input type="checkbox" class="select-all" /></td>
+					<td>&larr; Select/unselect all</td>
+				</tr>
+				{{#each tasks}}
+					<tr>
+						<td><input type="checkbox" class="projectTask" value="{{_id}}" name="{{name}}" id="{{_id}}" /></td>
+						<td><a href="/tasks/{{_id}}">{{name}}</a></td>
+					</tr>
+				{{/each}}
+			</table>
+		{{else}}
+			<br />
+		{{/if}}
+		<input type="submit" name="submit" id="submit" value="Save" />
+	</form>
+</template>

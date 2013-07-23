@@ -1,5 +1,6 @@
 Deps.autorun(function() {
 	Meteor.subscribe('userTasks');
+	Meteor.subscribe('userProjects');
 	Meteor.subscribe('userSettings');
 	Meteor.subscribe('todos');
 	Meteor.subscribe('taskTimes');

@@ -53,18 +53,20 @@ Template.taskForm.helpers({
 		taskAction = Session.get('taskAction');
 		Meteor.call('changePageTitle', taskAction + " task");
 		return taskAction;
-	},
-	userId : function() {
-		return Meteor.userId();
 	}
 });
 
 Template.showTask.helpers({
-	task : function () {
+	task : function() {
 		var id = Session.get('currentTaskId');
 		var task = Tasks.findOne(id);
 		Meteor.call('changePageTitle', "Task: " + task.name);
 		return task;
+	},
+	projectLink : function(id) {
+		var project = Projects.findOne(id);
+		var out = '<a href="/projects/' + id + '">' + project.name + '</a>';
+		return new Handlebars.SafeString(out);
 	},
 	moment : function(dateTime) {
 

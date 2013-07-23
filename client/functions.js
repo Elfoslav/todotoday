@@ -268,7 +268,7 @@ printTaskTimes = function(task, view) {
  */
 printTasksHistory = function(taskTimes) {
 	var out = '';
-	if(taskTimes.length) {
+	if(taskTimes && taskTimes.length) {
 		var day = null;
 		var totalDuration = 0;
 		var totalDayDuration = 0;
