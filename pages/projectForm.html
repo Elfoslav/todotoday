@@ -3,7 +3,7 @@
 	<form id="projectForm" class="inline-form">
 		<label for="name">Project name *:</label>
 		<input type="text" name="name" id="name" />
-		{{#if tasks}}
+		{{#if tasks.count}}
 			<h3>Select project tasks:</h3>
 			<table class="table">
 				<tr>

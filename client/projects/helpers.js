@@ -81,6 +81,7 @@ Template.projectShow.helpers({
 
 //this does not work properly - TODO improve
 Template.projectShow.created = function() {
+	/* Very bad script, It needs at least 3GB RAM to run when there is much task times
 	var tasks = Tasks.find({
 		project : Session.get('currentProjectId')
 	});
@@ -94,7 +95,7 @@ Template.projectShow.created = function() {
 			}
 			Session.set('projectTaskTimes', projectTaskTimes);
 		});
-	});
+	});*/
 }
 
 Template.projectShow.rendered = function() {

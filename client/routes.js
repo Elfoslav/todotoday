@@ -53,6 +53,14 @@ Meteor.Router.add({
 	return 'projects';
   },
 
+  '/projects/new': function() {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+	Session.set('projectAction', 'Add');
+	return 'projectForm';
+  },
+
   '/projects/:id': function(id) {
 	if(Meteor.user() == null) {
 	  return LOGIN_PAGE;
@@ -66,14 +74,6 @@ Meteor.Router.add({
 	} else {
 	  return NOT_FOUND;
 	}
-  },
-
-  '/projects/new': function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('projectAction', 'Add');
-	return 'projectForm';
   },
 
   '/projects/edit/:id': function(id) {
@@ -130,5 +130,4 @@ Meteor.Router.beforeRouting = function() {
   Session.set('dateFormatExample', null);
   Session.set('timeSpent', null);
   Session.set('projectTaskTimes', null);
-  console.log('beforeRouting');
 };
