@@ -22,15 +22,6 @@ Meteor.Router.add({
 	return 'taskForm';
   },
 
-  '/tasks/edit/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('taskEditId', id);
-	Session.set('taskAction', 'Edit');
-	return 'taskForm';
-  },
-
   '/tasks/:id': function(id) {
 	if(Meteor.user() == null) {
 	  return LOGIN_PAGE;
@@ -44,6 +35,15 @@ Meteor.Router.add({
 	} else {
 	  return NOT_FOUND;
 	}
+  },
+
+  '/tasks/edit/:id': function(id) {
+	if(Meteor.user() == null) {
+	  return LOGIN_PAGE;
+	}
+	Session.set('taskEditId', id);
+	Session.set('taskAction', 'Edit');
+	return 'taskForm';
   },
 
   '/projects': function( ){

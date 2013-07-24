@@ -25,6 +25,7 @@ Template.taskForm.events({
 			}
 
 			if(Session.get('taskAction') == 'Add') {
+				console.log('data:', data);
 				Meteor.call('insertTask', data, function(err, taskId) {
 					Meteor.Router.to('/tasks/'+taskId);
 				});

@@ -53,6 +53,9 @@ Template.taskForm.helpers({
 		taskAction = Session.get('taskAction');
 		Meteor.call('changePageTitle', taskAction + " task");
 		return taskAction;
+	},
+	userId : function() {
+		return Meteor.userId();
 	}
 });
 
