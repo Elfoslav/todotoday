@@ -6,6 +6,7 @@ Template.projectForm.helpers({
 			done : false,
 			$or : [
 				{ project : null },
+				{ project : '' },
 				{ project : projectId }
 			]
 		}, {
