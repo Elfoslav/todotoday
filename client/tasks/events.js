@@ -14,6 +14,7 @@ Template.taskForm.events({
 			description = $('#description').val();
 			//JSON data
 			data = $('#frm-task').serializeObject();
+			console.log(data);
 			//if checkbox done is not checked, set default done = false
 			if(!data.done) {
 				data.done = false;

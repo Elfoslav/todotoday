@@ -62,15 +62,16 @@ Template.projectShow.helpers({
 		});
 		var out = '';
 		var tasksCount = tasks.count();
-		var counter = 0;
+		out += '<ol>'
 		tasks.forEach(function(task) {
-			counter++;
-			if(counter == tasksCount) {
-				out += '<a href="/tasks/' + task._id + '">' + task.name + '</a>';
-			} else {
-				out += '<a href="/tasks/' + task._id + '">' + task.name + '</a>, ';
+			out += '<li>';
+			out += '<a href="/tasks/' + task._id + '">' + task.name + '</a>';
+			if(task.done) {
+				out += ' (done)';
 			}
+			out += '</li>';
 		});
+		out += '</ol>'
 		return new Handlebars.SafeString(out);
 	},
 	taskTimes : function() {

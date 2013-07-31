@@ -7,9 +7,25 @@ Template.taskForm.rendered = function() {
 	}
 
 	if(Session.get('taskAction') == 'Edit') {
-		task = Tasks.findOne(Session.get('taskEditId'));
+		var task = Tasks.findOne(Session.get('taskEditId'));
 		fillInForm(task);
 	}
+
+	var projects = Projects.find();
+	var taskProjectId = '';
+	if(typeof task != 'undefined') {
+		taskProjectId = task.project;
+	}
+	projects.forEach(function(project) {
+		var values = {
+			value : project._id,
+			text : project.name
+		};
+		if(taskProjectId == project._id) {
+			values.selected = true;
+		}
+		$('#project').append($('<option>', values));
+	});
 
 	initDatepicker('#due-date');
 };

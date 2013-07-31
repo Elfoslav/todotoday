@@ -13,11 +13,10 @@
 		<label for="description">Description:</label>
 		<textarea id="description" name="description" rows="6"></textarea>
 
-		<!-- TODO: projects
 		<label for="project">Project:</label>
 		<select id="project" name="project">
-			<option value="">No project</option>
-		</select>-->
+			<option value="0">No project</option>
+		</select>
 
 		<label for="due-date">Due date:</label>
 		<input type="text" id="due-date" class="datepicker" data-date="" data-date-format="{{dateFormatLower}}" name="dueDate">
@@ -26,7 +25,6 @@
 		<input type="text" id="estimated-time" name="estimatedTime" placeholder="eg.: 1.5"> hours
 
 		<input type="hidden" name="user" value="{{userId}}">
-		<input type="hidden" name="project" value="{{project}}">
 
 		<label for="done" class="checkbox"><input type="checkbox" id="done" name="done" value="true">Task is done</label>
 		<br>
