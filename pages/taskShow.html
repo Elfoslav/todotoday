@@ -21,9 +21,9 @@
 	{{#if doneTime}}<p>Done at: {{doneTime}}</p>{{/if}}
 	{{#if estimatedTime}}<p>Estimated time: {{estimatedTime}} h</p>{{/if}}
 	{{#if project}}<p>Project: {{projectLink project}}</p>{{/if}}
-	<div class="btn-group">
-	  {{> actionButtons }}
-	</div>
+
+	{{> actionButtons }}
+
   {{/with}}
 
   <h2>History - when I worked on this task:</h2>
@@ -47,14 +47,36 @@
 	<input type="submit" value="Save" />
   </form>
   {{{taskTimes task._id}}}
+
+  <!-- taskTime note modal window -->
+  <div id="add-note" class="modal hide fade" role="dialog" tabindex="-1" aria-hidden="true">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3>Task time note</h3>
+	</div>
+	<div class="modal-body">
+	  <form id="note-form">
+		<textarea placeholder="What have you been doing?"></textarea>
+	  </form>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-primary" id="save-note-btn" data-action="save-note" data-dismiss="modal" data-id="">Save changes</button>
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	</div>
+  </div>
 </template>
 
 <template name="actionButtons">
-  {{#if done}}
-	<button class="btn" data-action="undone" data-id="{{_id}}" title="Mark as undone"><i class="icon-repeat"></i></button>
-  {{else}}
-	<button class="btn" data-action="done" data-id="{{_id}}" title="Mark as done"><i class="icon-ok"></i></button>
-  {{/if}}
-  <a href="/tasks/edit/{{_id}}?source=task&id={{_id}}" class="btn" title="edit"><i class="icon-pencil"></i></a>
-  <button class="btn" data-action="delete" data-id="{{_id}}" title="delete"><i class="icon-remove"></i></button>
+  <p>
+	<div class="btn-group">
+	  {{#if done}}
+		<button class="btn" data-action="undone" data-id="{{_id}}" title="Mark as undone"><i class="icon-repeat"></i></button>
+	  {{else}}
+		<button class="btn" data-action="done" data-id="{{_id}}" title="Mark as done"><i class="icon-ok"></i></button>
+	  {{/if}}
+	  <a href="/tasks/edit/{{_id}}?source=task&id={{_id}}" class="btn" title="edit"><i class="icon-pencil"></i></a>
+	  <button class="btn" data-action="delete" data-id="{{_id}}" title="delete"><i class="icon-remove"></i></button>
+	</div>
+  </p>
+  <p><a href="/tasks" class="btn">&larr; Back to tasks</a></p>
 </template>

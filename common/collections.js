@@ -31,7 +31,8 @@ CurrentUserTask = new Meteor.Collection('currentUserTask');
 	user: userId,
 	task: taskId,
 	start: date,
-	end: date
+	end: date,
+	note: string
  }
  */
 TaskTimes = new Meteor.Collection('taskTimes');

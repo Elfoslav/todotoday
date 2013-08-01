@@ -50,8 +50,6 @@ Template.taskForm.events({
 
 Template.tasks.events({
 	'click [data-action]' : function(e) {
-		e.preventDefault();
-
 		processTaskAction(e);
 	}
 });
@@ -110,6 +108,12 @@ function redirectTask() {
 function processTaskAction(e) {
 	elem = e.currentTarget;
 	data = elem.dataset;
+
+	if(data.preventDefault == 'false') {
+		//dont prevent default eg. modal close etc.
+	} else {
+		e.preventDefault();
+	}
 
 	switch(data.action) {
 		case 'delete' :
@@ -212,6 +216,20 @@ function processTaskAction(e) {
 					Session.set('flashMessage', 'Task time could not be updated. Try again.');
 				}
 			});
+			break;
+		//open note modal form and fill in the note
+		case 'add-note' :
+			var taskTime = TaskTimes.findOne(data.id);
+			//set tasktime id to button
+			$('#save-note-btn').data('id', data.id);
+			console.log('add-note id: ', $('#save-note-btn').data('id'));
+			$('#note-form textarea').val(taskTime.note);
+			break;
+		case 'save-note' :
+			var note = $('#note-form textarea').val();
+			//need to get id dynamically, data.id is empty
+			var taskTimeId = $('#save-note-btn').data('id');
+			Meteor.call('saveNote', taskTimeId, note);
 			break;
 	}
 }

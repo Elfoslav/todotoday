@@ -239,15 +239,22 @@ printTaskTimes = function(task, view) {
 				//print new day
 				out += '<h3>' + currentDay + '</h3>';
 			}
-			out += '<p><strong>Start:</strong> ' + startTimeFormat + '\
-				<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
-				<strong>End:</strong> '+ endTimeFormat + '\
-				<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
-				| <strong>Duration:</strong>  ' + computeDuration(duration);
-			if(view == 'taskView') {
-				out += ', <a href="#edit" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
-					<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a></p>';
-			}
+			out += '<p>';
+				out += '<strong>Start:</strong> ' + startTimeFormat + '\
+					<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
+					<strong>End:</strong> '+ endTimeFormat + '\
+					<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
+					| <strong>Duration:</strong>  ' + computeDuration(duration);
+				if(view == 'taskView') {
+					out += ', <a href="#edit" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
+						<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a>';
+					out += ', <a href="#add-note" data-action="add-note" \
+						data-id="' + taskTime._id + '" data-toggle="modal" role="button">Note</a>';
+					if(taskTime.note) {
+						out += ' - ' + generateNewLines(taskTime.note);
+					}
+				}
+			out += '</p>';
 			day = currentDay;
 			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
 			if(nextTaskDay !== day) {
@@ -408,3 +415,11 @@ triggerAnalytics = function() {
 	ga('create', 'UA-15567197-7', 'meteor.com');
 	ga('send', 'pageview');
 };
+
+/**
+ * @param string
+ * @returns string new lines \n replaced by <br /> tag
+ */
+generateNewLines = function(str) {
+	return str.replace(/\n/g, "<br />")
+}

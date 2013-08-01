@@ -130,7 +130,7 @@ Template.showTask.helpers({
 		return new Handlebars.SafeString(out);
 	},
 	showDescription : function(description) {
-		return new Handlebars.SafeString(description.replace(/\n/g, "<br />"));
+		return new Handlebars.SafeString(generateNewLines(description));
 	},
 	dateTimeFormat : function() {
 		return getTimePickerDateTimeFormat(Session.get('dateFormat'), Session.get('timeFormat'));

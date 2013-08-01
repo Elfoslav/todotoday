@@ -101,5 +101,12 @@ Meteor.methods({
 				end : taskTimeData.end
 			}
 		});
+	},
+	saveNote : function(taskTimeId, note) {
+		TaskTimes.update(taskTimeId, {
+			$set : {
+				note : note
+			}
+		});
 	}
 });
