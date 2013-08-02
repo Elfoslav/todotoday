@@ -84,7 +84,10 @@ Template.showTask.helpers({
 	},
 	projectLink : function(id) {
 		var project = Projects.findOne(id);
-		var out = '<a href="/projects/' + id + '">' + project.name + '</a>';
+		var out = '';
+		if(project) {
+			out += '<a href="/projects/' + id + '">' + project.name + '</a>';
+		}
 		return new Handlebars.SafeString(out);
 	},
 	moment : function(dateTime) {
