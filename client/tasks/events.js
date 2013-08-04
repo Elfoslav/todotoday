@@ -92,8 +92,7 @@ Template.showTask.events({
 
 function redirectTask() {
 	var id = getURLParameter('id');
-	console.log('id: ', id, new Date());
-	if(id) {
+	if(id !== 'null') {
 		//back to task
 		Meteor.Router.to('/tasks/'+id);
 	}
@@ -173,15 +172,17 @@ function processTaskAction(e) {
 				console.log('Server end date: ', data);
 			});
 			break;
+		//open edit task time modal
 		case 'edit-tasktime' :
-			$('[data-action][data-id="' + data.id + '"]').removeClass('hide');
-			$(elem).addClass('hide');
-
-			showHideTaskTimeInputs(data.id);
+			var $taskTimeRow = $(elem).closest('.tasktime');
+			//fill in start time in modal dialog
+			$('#edit-start-time').val($('input[data-type="start"]', $taskTimeRow).val());
+			$('#edit-end-time').val($('input[data-type="end"]', $taskTimeRow).val());
+			$('#save-tasktime-btn').data('id', data.id);
 			break;
 		case 'save-tasktime' :
-			var $start = $('input[data-type="start"][data-id="' + data.id + '"]');
-			var $end = $('input[data-type="end"][data-id="' + data.id + '"]');
+			var $start = $('#edit-start-time');
+			var $end = $('#edit-end-time');
 			var format = getMomentDateTimeFormat();
 			var startDate = moment($start.val(), format);
 			var endDate = moment($end.val(), format);
@@ -198,7 +199,7 @@ function processTaskAction(e) {
 				break;
 			}
 			var taskTimeData = {
-				id : data.id,
+				id : $('#save-tasktime-btn').data('id'),
 				start : startDate.toDate(),
 				end : endDate.toDate()
 			};
@@ -209,20 +210,18 @@ function processTaskAction(e) {
 			Meteor.call('updateTaskTime', data.taskId, taskTimeData, function(err, serverData) {
 				if(!err) {
 					Session.set('flashMessage', 'Task time updated.');
-					$('[data-action][data-id="' + data.id + '"]').removeClass('hide');
-					$(elem).addClass('hide');
-					showHideTaskTimeInputs(data.id);
 				} else {
 					Session.set('flashMessage', 'Task time could not be updated. Try again.');
 				}
 			});
+			//manually hide modal
+			$('#edit-tasktime').modal('hide');
 			break;
 		//open note modal form and fill in the note
 		case 'add-note' :
 			var taskTime = TaskTimes.findOne(data.id);
 			//set tasktime id to button
 			$('#save-note-btn').data('id', data.id);
-			console.log('add-note id: ', $('#save-note-btn').data('id'));
 			$('#note-form textarea').val(taskTime.note);
 			break;
 		case 'save-note' :

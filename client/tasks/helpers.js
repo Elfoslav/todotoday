@@ -1,14 +1,23 @@
 
 Template.taskForm.rendered = function() {
 
-	group = getURLParameter('group');
-	if(group) {
-		$("#group").val(group);
-	}
-
 	if(Session.get('taskAction') == 'Edit') {
 		var task = Tasks.findOne(Session.get('taskEditId'));
 		fillInForm(task);
+	} else {
+		//set empty form. Needed when going to add new task from edidt task page
+		fillInForm({
+			name: '',
+			description: '',
+			project: '0',
+			dueDate: '',
+			estimatedTime: ''
+		});
+	}
+
+	group = getURLParameter('group');
+	if(group) {
+		$("#group").val(group);
 	}
 
 	var projects = Projects.find();

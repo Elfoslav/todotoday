@@ -239,19 +239,19 @@ printTaskTimes = function(task, view) {
 				//print new day
 				out += '<h3>' + currentDay + '</h3>';
 			}
-			out += '<p>';
-				out += '<strong>Start:</strong> ' + startTimeFormat + '\
+			out += '<p class="tasktime">';
+				out += startTimeFormat + '\
 					<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
-					<strong>End:</strong> '+ endTimeFormat + '\
+					 '+ endTimeFormat + '\
 					<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
-					| <strong>Duration:</strong>  ' + computeDuration(duration);
+					, (' + computeDuration(duration) + ')';
 				if(view == 'taskView') {
-					out += ', <a href="#edit" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
+					out += ', <a href="#edit-tasktime" data-toggle="modal" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
 						<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a>';
 					out += ', <a href="#add-note" data-action="add-note" \
-						data-id="' + taskTime._id + '" data-toggle="modal" role="button">Note</a>';
+						data-id="' + taskTime._id + '" data-toggle="modal">Note</a>';
 					if(taskTime.note) {
-						out += ' - ' + generateNewLines(taskTime.note);
+						out += '<p>' + generateNewLines(taskTime.note) + '</p>';
 					}
 				}
 			out += '</p>';
@@ -310,13 +310,6 @@ printTaskTime = function(taskTime) {
 	var duration = taskTime.end - taskTime.start;
 	var task = Tasks.findOne(taskTime.task);
 	return '<p>' + start + ' - ' + end + ', (' + computeDuration(duration) + ') &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
-};
-
-showHideTaskTimeInputs = function(id) {
-	var $inputs = $('input[data-id="' + id + '"]');
-	$inputs.each(function(i, input) {
-		$(input).toggleClass('hide');
-	});
 };
 
 sortTaskTimes = function(taskTime1, taskTime2) {

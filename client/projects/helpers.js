@@ -58,8 +58,14 @@ Template.projectShow.helpers({
 	},
 	projectTasks : function() {
 		var tasks = Tasks.find({
-			project : Session.get('currentProjectId')
-		});
+				project : Session.get('currentProjectId'),
+			},
+			{
+				sort : {
+					done : 0
+				}
+			}
+		);
 		var out = '';
 		var tasksCount = tasks.count();
 		out += '<ol>'
