@@ -17,8 +17,19 @@
 			{{/if}}
 		  </p>
 		{{/if}}
-		{{#if doingFrom _id}}<p>Doing from: {{doingFrom _id}}</p>{{/if}}
-		{{#if doingFrom _id}}{{#isolate}}<p>Time spent: {{timeSpent _id}}</p>{{/isolate}}{{/if}}
+		{{#if doingFrom _id}}
+		  <form>
+			<fieldset>
+			  <legend>Doing</legend>
+			  <p>Doing from: {{doingFrom _id}}</p>
+			  {{#isolate}}
+				<p>Time spent: {{timeSpent _id}}</p>
+			  {{/isolate}}
+			  <textarea id="doing-note" placeholder="What are you doing?"></textarea>
+			</fieldset>
+		  </form>
+		{{/if}}
+
 		{{#if description}}<p><b>Description:</b> {{showDescription description}}</p>{{/if}}
 		{{#if dueDate}}<p>Due date: {{moment dueDate}}</p>{{/if}}
 		{{#if doneTime}}<p>Done at: {{doneTime}}</p>{{/if}}

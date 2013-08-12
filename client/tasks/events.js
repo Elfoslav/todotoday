@@ -161,7 +161,8 @@ function processTaskAction(e) {
 			});
 			break;
 		case 'stopdoing' :
-			Meteor.call('stopDoing', data.id, function(err, data) {
+			var doingNote = $('#doing-note').val();
+			Meteor.call('stopDoing', data.id, doingNote, function(err, data) {
 				if(!err) {
 					console.log('stopdoing interval: ', app.doingInterval);
 					if(app.doingInterval) {

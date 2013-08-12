@@ -43,7 +43,7 @@ Meteor.methods({
 		Tasks.update(id, { $set : { doing: true }});
 		return new Date();
 	},
-	stopDoing: function(id) {
+	stopDoing: function(id, doingNote) {
 		currUserTask = CurrentUserTask.findOne({ task : id });
 
 		if(currUserTask) {
@@ -52,7 +52,8 @@ Meteor.methods({
 				task : id,
 				user : this.userId,
 				start: currUserTask.start,
-				end: new Date()
+				end: new Date(),
+				note: doingNote
 			});
 		}
 		Tasks.update(id, { $set : { doing: false }});
