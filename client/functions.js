@@ -321,7 +321,12 @@ printTaskTime = function(taskTime) {
 	var end = moment(taskTime.end).format(Session.get('timeFormat'));
 	var duration = taskTime.end - taskTime.start;
 	var task = Tasks.findOne(taskTime.task);
-	return '<p>' + start + ' - ' + end + ', (' + computeDuration(duration) + ', (' + computeHourDuration(duration) + 'h)) &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
+	if(typeof taskTime.note == 'undefined') {
+		console.log(taskTime.note);
+		taskTime.note = '';
+	}
+	return '<p title="'+taskTime.note+'">' + start + ' - ' + end + ', (' + computeDuration(duration) + ', \
+		(' + computeHourDuration(duration) + 'h)) &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
 };
 
 sortTaskTimes = function(taskTime1, taskTime2) {
