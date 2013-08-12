@@ -198,8 +198,20 @@ computeDuration = function (duration) {
 	if(mDuration.seconds() > 0) {
 		out += mDuration.seconds() + 's';
 	}
-	return out;
+	return $.trim(out);
 };
+
+/**
+ * @param int duration in milliseconds
+ * @returns float duration in hours computed from duration in milliseconds
+ * rounded to 2 decimals
+ */
+computeHourDuration = function(duration) {
+	var seconds = duration / 1000;
+	var minutes = seconds / 60;
+	var hours = minutes / 60;
+	return Number(hours.toFixed(2));
+}
 
 /**
  * @param task
@@ -244,7 +256,7 @@ printTaskTimes = function(task, view) {
 					<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
 					 '+ endTimeFormat + '\
 					<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
-					, (' + computeDuration(duration) + ')';
+					, (' + computeDuration(duration) + ', (' + computeHourDuration(duration) + 'h))';
 				if(view == 'taskView') {
 					out += ', <a href="#edit-tasktime" data-toggle="modal" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
 						<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a>';
@@ -258,11 +270,11 @@ printTaskTimes = function(task, view) {
 			day = currentDay;
 			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
 			if(nextTaskDay !== day) {
-				out += '<p><strong>Total: ' + computeDuration(dayDuration) + '</strong></p>';
+				out += '<p><strong>Total: ' + computeDuration(dayDuration) + ', (' + computeHourDuration(dayDuration) + 'h)</strong></p>';
 				dayDuration = 0;
 			}
 			if(timesCount == counter) {
-				out += '<h3>Total: ' + computeDuration(totalDuration) + '</h3>';
+				out += '<h3>Total: ' + computeDuration(totalDuration) + ', (' + computeHourDuration(totalDuration) + 'h)</h3>';
 			}
 		});
 	}
@@ -294,12 +306,12 @@ printTasksHistory = function(taskTimes) {
 			totalDayDuration += taskTime.end - taskTime.start;
 			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
 			if(nextTaskDay !== day) {
-				out += '<p><strong>Total: ' + computeDuration(totalDayDuration) + '</strong></p>';
+				out += '<p><strong>Total: ' + computeDuration(totalDayDuration) + ', (' + computeHourDuration(totalDayDuration) + 'h)</strong></p>';
 				totalDuration += totalDayDuration;
 				totalDayDuration = 0;
 			}
 		});
-		out += '<h3>Total: ' + computeDuration(totalDuration) + '</h3>';
+		out += '<h3>Total: ' + computeDuration(totalDuration) + ', (' + computeHourDuration(totalDuration) + 'h)</h3>';
 	}
 	return out;
 };
@@ -309,7 +321,7 @@ printTaskTime = function(taskTime) {
 	var end = moment(taskTime.end).format(Session.get('timeFormat'));
 	var duration = taskTime.end - taskTime.start;
 	var task = Tasks.findOne(taskTime.task);
-	return '<p>' + start + ' - ' + end + ', (' + computeDuration(duration) + ') &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
+	return '<p>' + start + ' - ' + end + ', (' + computeDuration(duration) + ', (' + computeHourDuration(duration) + 'h)) &rarr; <a href="/tasks/' + task._id + '">' + task.name + '</a></p>';
 };
 
 sortTaskTimes = function(taskTime1, taskTime2) {

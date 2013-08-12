@@ -89,21 +89,18 @@ Template.projectShow.helpers({
 
 //this does not work properly - TODO improve
 Template.projectShow.created = function() {
-	/* Very bad script, It needs at least 3GB RAM to run when there is much task times
-	var tasks = Tasks.find({
-		project : Session.get('currentProjectId')
-	});
-	var projectTaskTimes = '';
-	tasks.forEach(function(task) {
-		Meteor.call('getTaskTimesByDate', null, null, task._id, function(err, taskTimes) {
-			if(!Session.get('projectTaskTimes')) {
-				projectTaskTimes += printTasksHistory(taskTimes);
-			} else {
-				projectTaskTimes += Session.get('projectTaskTimes') + printTasksHistory(taskTimes);
-			}
-			Session.set('projectTaskTimes', projectTaskTimes);
-		});
-	});*/
+	//var projectTaskTimes = '';
+	////get all task times
+	//Meteor.call('getTaskTimesByDate', null, null, null, function(err, taskTimes) {
+	//	if(taskTimes) {
+	//		taskTimes.each(function(taskTime) {
+	//			var task = Tasks.findOne({
+	//				project : Session.get('currentProjectId')
+	//			});
+	//		});
+	//	}
+	//	Session.set('projectTaskTimes', projectTaskTimes);
+	//});
 }
 
 Template.projectShow.rendered = function() {
