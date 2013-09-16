@@ -34,6 +34,7 @@
 
 	<p>
 		All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}
+		{{#if totalDayTime}}| Total day time: {{totalDayTime}}h {{/if}}
 		{{#if currentTask}}| {{currentTask}} {{/if}}
 	</p>
 

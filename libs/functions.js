@@ -39,6 +39,15 @@ filterTaskTimes = function(task, startTime, endTime) {
 
 /**
  * @param date object of Date
+ * @returns date end of day, eg.: 01.07.2013 00:00:00
+ */
+getStartDayDate = function(date) {
+	var firstDay = moment(date, Session.get('dateFormat')).clone();
+	return firstDay.hours(0).minutes(0).seconds(0).toDate();
+}
+
+/**
+ * @param date object of Date
  * @returns date end of day, eg.: 01.07.2013 23:59:59
  */
 getEndDayDate = function(date) {

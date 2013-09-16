@@ -37,3 +37,16 @@ Handlebars.registerHelper('currentTask', function() {
 	}
 	return '';
 });
+
+Handlebars.registerHelper('totalDayTime', function() {
+
+	var todayTaskTimes = TaskTimes.find({
+		user : Meteor.userId(),
+		start : { $gte: getStartDayDate(moment()), $lte: getEndDayDate(moment()) }
+	});
+	var totalTime = 0;
+	todayTaskTimes.forEach(function(item) {
+		totalTime += item.end - item.start;
+	});
+	return computeHourDuration(totalTime);
+});

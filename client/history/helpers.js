@@ -6,8 +6,6 @@ Template.history.rendered = function() {
 		var date = $(this).find('input[type="text"]').val();
 		var firstDay = moment(date, Session.get('dateFormat')).toDate();
 		var lastDay = getEndMonthDate(firstDay);
-		console.log('firstDay: ', firstDay);
-		console.log('lastDay: ', lastDay);
 		Meteor.call('getTaskTimesByDate', firstDay, lastDay, function(err, taskTimes) {
 			Session.set('tasksHistory', printTasksHistory(taskTimes));
 		});
