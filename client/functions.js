@@ -256,12 +256,13 @@ printTaskTimes = function(task, view) {
 					<input type="text" class="hide" value="' + startDateTime + '" data-type="start" data-id="' + taskTime._id + '" /> - \
 					 '+ endTimeFormat + '\
 					<input type="text" class="hide" value="' + endDateTime + '" data-type="end" data-id="' + taskTime._id + '" />\
-					, (' + computeDuration(duration) + ', (' + computeHourDuration(duration) + 'h))';
+					, (' + computeDuration(duration) + ', (<span class="duration-' + taskTime._id + '">' + computeHourDuration(duration) + '</span>h))';
 				if(view == 'taskView') {
 					out += ', <a href="#edit-tasktime" data-toggle="modal" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
 						<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a>';
 					out += ', <a href="#add-note" data-action="add-note" \
 						data-id="' + taskTime._id + '" data-toggle="modal">Note</a>';
+					out += ', <a href="#add" data-action="compute-time-add" data-id="' + taskTime._id + '" data-task-id="' + task._id + '" data-day="' + moment(currentDay).format('DD-MM-YYYY') + '">+</a>';
 					if(taskTime.note) {
 						out += '<p>' + generateNewLines(taskTime.note) + '</p>';
 					}
@@ -270,7 +271,7 @@ printTaskTimes = function(task, view) {
 			day = currentDay;
 			var nextTaskDay = (nextTaskTime) ? moment(nextTaskTime.start).format(format) : nextTaskTime;
 			if(nextTaskDay !== day) {
-				out += '<p><strong>Total: ' + computeDuration(dayDuration) + ', (' + computeHourDuration(dayDuration) + 'h)</strong></p>';
+				out += '<p><strong>Total: ' + computeDuration(dayDuration) + ', (' + computeHourDuration(dayDuration) + 'h)</strong> <span class="computed-time-' + moment(currentDay).format('DD-MM-YYYY') + '"></span></p>';
 				dayDuration = 0;
 			}
 			if(timesCount == counter) {

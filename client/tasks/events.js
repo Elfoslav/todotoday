@@ -231,5 +231,32 @@ function processTaskAction(e) {
 			var taskTimeId = $('#save-note-btn').data('id');
 			Meteor.call('saveNote', taskTimeId, note);
 			break;
+		//compute task time
+		case 'compute-time-add' :
+			var duration = $('.duration-' + data.id).text();
+			var $result = $('.computed-time-' + data.day);
+			console.log($result);
+			if($result.text()) {
+				$result.text(parseFloat($result.text()) + parseFloat(duration));
+			} else {
+				$result.text(parseFloat(duration));
+			}
+			//$(elem).data('action', 'compute-time-subtract');
+			$(elem).attr('data-action', 'compute-time-subtract');
+			$(elem).text('-');
+			break;
+		case 'compute-time-subtract' :
+			var duration = $('.duration-' + data.id).text();
+			var $result = $('.computed-time-' + data.day);
+			console.log($result);
+			if($result.text()) {
+				$result.text(parseFloat($result.text()) - parseFloat(duration));
+			} else {
+				$result.text(parseFloat(duration));
+			}
+			//$(elem).data('action', 'compute-time-add');
+			$(elem).attr('data-action', 'compute-time-add');
+			$(elem).text('+');
+			break;
 	}
 }
