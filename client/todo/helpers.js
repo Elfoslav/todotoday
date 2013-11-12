@@ -16,11 +16,11 @@ Template.todo.helpers({
 				}
 				if(todo.user == Meteor.userId()) {
 					out += ' | <input type="button" value="Delete" data-action="delete" data-id="' + todo._id + '" />';
-					if(!todo.done) {
-						out += ' <input type="button" value="Done" data-action="done" data-id="' + todo._id + '" />';
-					} else {
-						out += ' <input type="button" value="Undone" data-action="undone" data-id="' + todo._id + '" />';
-					}
+				}
+				if(!todo.done) {
+					out += ' <input type="button" value="Done" data-action="done" data-id="' + todo._id + '" />';
+				} else {
+					out += ' <input type="button" value="Undone" data-action="undone" data-id="' + todo._id + '" />';
 				}
 				out += '</li>';
 			});
