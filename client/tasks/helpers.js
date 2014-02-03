@@ -69,6 +69,12 @@ var fillInForm = function(data) {
 					$el.val(moment(val).format(Session.get('dateFormat')));
 				}
 			}
+			if(name == 'group') {
+				//for unknown reason we have to set timeout. Otherwise it's not set.
+				setTimeout(function() {
+					$el.val(val);
+				}, 1);
+			}
 		});
 	}
 }
