@@ -25,7 +25,7 @@
 			  {{#isolate}}
 				<p>Time spent: {{timeSpent _id}}</p>
 			  {{/isolate}}
-			  <textarea id="doing-note" placeholder="What are you doing?"></textarea>
+			  <textarea id="doing-note" placeholder="What are you doing?">{{currentTask.note}}</textarea>
 			</fieldset>
 		  </form>
 		{{/if}}

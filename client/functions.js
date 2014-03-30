@@ -434,3 +434,10 @@ triggerAnalytics = function() {
 generateNewLines = function(str) {
 	return str.replace(/\n/g, "<br />")
 }
+
+onWindowClose  = function(e) {
+	var task = CurrentUserTask.findOne({ user: Meteor.userId() });
+	if(task)
+		return 'You are working on a task. Do you really want to close the window?';
+	return undefined;
+};

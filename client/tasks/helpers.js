@@ -97,6 +97,11 @@ Template.showTask.helpers({
 		Meteor.call('changePageTitle', "Task: " + task.name);
 		return task;
 	},
+	currentTask : function() {
+		var id = Session.get('currentTaskId');
+		var task = CurrentUserTask.findOne({ task: id });
+		return task;
+	},
 	projectLink : function(id) {
 		var project = Projects.findOne(id);
 		var out = '';

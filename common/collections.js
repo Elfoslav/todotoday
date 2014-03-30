@@ -19,7 +19,8 @@ Tasks = new Meteor.Collection('tasks');
  * {
 	task : taskId,
 	user : userId,
-	start: date
+	start: date,
+	note: string
  }
  *
  */

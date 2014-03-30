@@ -11,6 +11,12 @@ Meteor.methods({
 		else
 			throw new Meteor.Error(500, 'Task could not be updated, data is empty');
 	},
+	updateCurrentTask: function(id, data) {
+		if(data)
+			CurrentUserTask.update(id, { $set : data });
+		else
+			throw new Meteor.Error(500, 'Task could not be updated, data is empty');
+	},
 	deleteTask: function(id) {
 		Tasks.remove(id);
 	},

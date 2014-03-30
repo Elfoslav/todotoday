@@ -19,7 +19,6 @@ Deps.autorun(function() {
     }
 });
 
-
 Meteor.startup(function() {
-
+	window.onbeforeunload = onWindowClose;
 });

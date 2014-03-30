@@ -87,6 +87,9 @@ Template.showTask.events({
 				Session.set('flashMessage', 'Task time could not be saved. Try again.');
 			}
 		});
+	},
+	'focusout #doing-note': function() {
+		Meteor.call('updateCurrentTask', currUserTask._id, { note: $('#doing-note').val() });
 	}
 });
 
