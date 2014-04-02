@@ -87,7 +87,7 @@ Meteor.methods({
 		}
 		return totalTime;
 	},
-	insertTaskTime : function(taskId, start, end) {
+	insertTaskTime : function(taskId, start, end, note) {
 		if(!(taskId && start && end)) {
 			throw new Meteor.Error(500, 'Missing "taskId" or "start" or "end" parameter');
 		}
@@ -95,7 +95,8 @@ Meteor.methods({
 			task : taskId,
 			user : this.userId,
 			start : start,
-			end : end
+			end : end,
+			note: note
 		});
 	},
 	updateTaskTime : function(taskId, taskTimeData) {
@@ -105,7 +106,8 @@ Meteor.methods({
 		TaskTimes.update(taskTimeData.id, {
 			$set : {
 				start : taskTimeData.start,
-				end : taskTimeData.end
+				end : taskTimeData.end,
+				note: taskTimeData.note
 			}
 		});
 	},

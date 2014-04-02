@@ -65,6 +65,8 @@ Template.showTask.events({
     var taskId = Session.get('currentTaskId');
     var start = $('#start-time-input').val();
     var end = $('#end-time-input').val();
+    var note = $('#time-form').find('textarea[name="note"]').val();
+    
     if(!(start && end)) {
       alert('Fill in start and end time');
       return;
@@ -78,7 +80,7 @@ Template.showTask.events({
       alert('End time must be greater than start time.');
       return;
     }
-    Meteor.call('insertTaskTime', taskId, start, end, function(err, data) {
+    Meteor.call('insertTaskTime', taskId, start, end, note, function(err, data) {
       if(!err) {
         Session.set('flashMessage', 'Task time saved.');
         $('#start-time-input').val('');
@@ -183,6 +185,8 @@ function processTaskAction(e) {
       $('#edit-start-time-picker').data('datetimepicker').setLocalDate(moment($('input[data-type="start"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
       $('#edit-end-time-picker').data('datetimepicker').setLocalDate(moment($('input[data-type="end"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
       
+      var taskTime = TaskTimes.findOne(data.id);
+      $('#edit-tasktime-form textarea[name="note"]').val(taskTime.note);
       $('#save-tasktime-btn').data('id', data.id);
       break;
     case 'save-tasktime' :
@@ -191,6 +195,8 @@ function processTaskAction(e) {
       var format = getMomentDateTimeFormat();
       var startDate = moment($start.val(), format);
       var endDate = moment($end.val(), format);
+      var note = $('#edit-tasktime-form textarea[name="note"]').val();
+      
       if(!startDate.isValid()) {
         alert('Start date-time is invalid. Required format is "'+ format + '"');
         break;
@@ -206,7 +212,8 @@ function processTaskAction(e) {
       var taskTimeData = {
         id : $('#save-tasktime-btn').data('id'),
         start : startDate.toDate(),
-        end : endDate.toDate()
+        end : endDate.toDate(),
+        note: note
       };
       /**
        * @param taskId
@@ -221,19 +228,6 @@ function processTaskAction(e) {
       });
       //manually hide modal
       $('#edit-tasktime').modal('hide');
-      break;
-    //open note modal form and fill in the note
-    case 'add-note' :
-      var taskTime = TaskTimes.findOne(data.id);
-      //set tasktime id to button
-      $('#save-note-btn').data('id', data.id);
-      $('#note-form textarea').val(taskTime.note);
-      break;
-    case 'save-note' :
-      var note = $('#note-form textarea').val();
-      //need to get id dynamically, data.id is empty
-      var taskTimeId = $('#save-note-btn').data('id');
-      Meteor.call('saveNote', taskTimeId, note);
       break;
     //compute task time
     case 'compute-time-add' :

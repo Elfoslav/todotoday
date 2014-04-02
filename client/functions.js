@@ -260,8 +260,6 @@ printTaskTimes = function(task, view) {
 				if(view == 'taskView') {
 					out += ', <a href="#edit-tasktime" data-toggle="modal" data-action="edit-tasktime" data-id="' + taskTime._id + '">Edit</a>\
 						<a href="#save" class="hide" data-action="save-tasktime" data-id="' + taskTime._id + '" data-task-id="' + task._id + '">Save</a>';
-					out += ', <a href="#add-note" data-action="add-note" \
-						data-id="' + taskTime._id + '" data-toggle="modal">Note</a>';
 					out += ', <a href="#add" data-action="compute-time-add" data-id="' + taskTime._id + '" data-task-id="' + task._id + '" data-day="' + moment(currentDay).format('DD-MM-YYYY') + '">+</a>';
 					if(taskTime.note) {
 						out += '<p>' + generateNewLines(taskTime.note) + '</p>';
