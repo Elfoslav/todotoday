@@ -95,9 +95,23 @@
 	</div>
 	<div class="modal-body">
 	  <form id="edit-tasktime-form">
-		<input type="text" name="start-time" id="edit-start-time" />
+			<span id="edit-start-time-picker" class="input-append">
+				<input type="text" data-format="{{dateTimeFormat}}" name="start-time" id="edit-start-time" />
+				{{#constant}}
+					<span class="add-on">
+						<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+					</span>
+				{{/constant}}
+			</span>
 		-
-		<input type="text" name="end-time" id="edit-end-time" />
+		  <span id="edit-end-time-picker" class="input-append">
+				<input type="text" data-format="{{dateTimeFormat}}" name="end-time" id="edit-end-time" />
+				{{#constant}}
+					<span class="add-on">
+						<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+					</span>
+				{{/constant}}
+			</span>
 	  </form>
 	</div>
 	<div class="modal-footer">

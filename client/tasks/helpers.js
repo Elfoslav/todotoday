@@ -161,7 +161,9 @@ Template.showTask.helpers({
 });
 
 Template.showTask.rendered = function() {
-	$('#start-time, #end-time, #datetimepicker1').datetimepicker();
+	$('#edit-start-time-picker, #edit-end-time-picker, #start-time, #end-time').datetimepicker({
+		format: getTimePickerDateTimeFormat(Session.get('dateFormat'), Session.get('timeFormat'))
+	});
 };
 
 /**
