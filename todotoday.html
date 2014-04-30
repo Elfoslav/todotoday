@@ -4,57 +4,57 @@
   <title>TodoToday - task & time management</title>
 </head>
 <body>
-  {{>googleAnalytics}}
+</body>
+
+<template name="layout">
+	{{>googleAnalytics}}
   <div class="container">
-	{{#unless isPageNotFound}}
-
-	{{/unless}}
-
-	<br>
-	{{loginButtons}}
-	<br><br>
-
-	<div class="navbar">
-	  <div class="navbar-inner">
-		<!--<a class="brand" href="#">Title</a>-->
-		<ul class="nav">
-		  <li><a href="/">Home</a></li>
-		  <li><a href="/tasks/new">+ Add task</a></li>
-		  <li><a href="/tasks">Show tasks</a></li>
-		  <li><a href="/projects/new">+ Add project</a></li>
-		  <li><a href="/projects">Show projects</a></li>
-		  <li><a href="/history">History</a></li>
-		  <li><a href="/settings">Settings</a></li>
-		  <li><a href="/about">About</a></li>
-		  <li><a href="/todo">Improve TodoToday</a></li>
-		</ul>
-	  </div>
-	</div>
-
-	{{> flashMessage }}
-
-	<p>
-		All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}
-		{{#if totalDayTime}}| Total day time: {{totalDayTime}}h {{/if}}
-		{{#if currentTask}}| {{currentTask}} {{/if}}
-	</p>
-
-	{{#isolate}} {{renderPage}} {{/isolate}}
+		{{#unless isPageNotFound}}
+	
+		{{/unless}}
+	
+		<br>
+		{{> loginButtons}}
+		<br><br>
+	
+		<div class="navbar">
+			<div class="navbar-inner">
+			<!--<a class="brand" href="#">Title</a>-->
+			<ul class="nav">
+				<li><a href="/">Home</a></li>
+				<li><a href="/tasks/new">+ Add task</a></li>
+				<li><a href="/tasks">Show tasks</a></li>
+				<li><a href="/projects/new">+ Add project</a></li>
+				<li><a href="/projects">Show projects</a></li>
+				<li><a href="/history">History</a></li>
+				<li><a href="/settings">Settings</a></li>
+				<li><a href="/about">About</a></li>
+				<li><a href="/todo">Improve TodoToday</a></li>
+			</ul>
+			</div>
+		</div>
+	
+		{{> flashMessage }}
+	
+		<p>
+			All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}
+			{{#if totalDayTime}}| Total day time: {{totalDayTime}}h {{/if}}
+			{{#if currentTask}}| {{currentTask}} {{/if}}
+		</p>
+	
+		{{> yield}}
   </div>
 
   <div class="footer">
 	2013 Created by <a href="http://twitter.com/elfoslav" target="__blank">@elfoslav</a><br/>
 	Do you miss some features or did you find a bug? <a href="mailto:tomas@hromnik.com">Write me.</a>
   </div>
-
-</body>
+</template>
 
 <template name="flashMessage">
-  {{#isolate}}
 	{{#if flashMessage}}
 	  <p class="alert flash-message">{{flashMessage}}</p>
 	{{/if}}
-  {{/isolate}}
 </template>
 
 <template name="googleAnalytics"></template>

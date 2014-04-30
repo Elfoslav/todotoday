@@ -1,14 +1,10 @@
 
 if (Meteor.isClient) {
 
-  Handlebars.registerHelper('isPageNotFound', function(input) {
-    return Meteor.Router.page() == 'not_found';
-  });
-
   Handlebars.registerHelper("dump", function(optionalValue) {
-	console.log("Current Context");
-	console.log("====================");
-	console.log(this);
+    console.log("Current Context");
+    console.log("====================");
+    console.log(this);
 
     console.log("Value");
     console.log("====================");
@@ -16,7 +12,7 @@ if (Meteor.isClient) {
   });
 
   Template.flashMessage.flashMessage = function() {
-	return Session.get('flashMessage');
+    return Session.get('flashMessage');
   }
 
 }

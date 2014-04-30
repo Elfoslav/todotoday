@@ -1,126 +1,165 @@
 
-NOT_FOUND = 'not_found';
+NOT_FOUND = 'notFound';
 LOGIN_PAGE = 'login';
 
-Meteor.Router.add({
-  '/': function() {
-	return 'home';
-  },
+Router.map(function() {
+  this.route('home', { path: '/'},{ data: function() { console.log('home'); } });
+  
+  this.route('login');
 
-  '/tasks': function( ){
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'tasks';
-  },
+  this.route('tasks', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'tasks';
+    }
+  });
 
-  '/tasks/new': function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('taskAction', 'Add');
-	return 'taskForm';
-  },
+  this.route('taskForm', {
+    path: '/tasks/new',
+    data: function() {
+      Session.set('taskAction', 'Add');
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'taskForm';
+    }
+  });
 
-  '/tasks/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
+  this.route('showTask', {
+    path: '/tasks/:id',
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+    
+      var id = this.params.id;
+      task = Tasks.findOne(id);
+      if(task && task.user == Meteor.userId()) {
+        // access parameters in order a function args too
+        Session.set('currentTaskId', id);
+        return 'showTask';
+      } else {
+        return NOT_FOUND;
+      }
+    }
+  });
 
-	task = Tasks.findOne(id);
-	if(task && task.user == Meteor.userId()) {
-	  // access parameters in order a function args too
-	  Session.set('currentTaskId', id);
-	  return 'showTask';
-	} else {
-	  return NOT_FOUND;
-	}
-  },
+  this.route('taskForm', {
+    path: '/tasks/edit/:id',
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      var id = this.params.id;
+      Session.set('taskEditId', id);
+      Session.set('taskAction', 'Edit');
+      return 'taskForm';
+    }
+  });
+    
+  this.route('projects', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'projects';
+    }
+  });
 
-  '/tasks/edit/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('taskEditId', id);
-	Session.set('taskAction', 'Edit');
-	return 'taskForm';
-  },
+  this.route('projectForm', {
+    path: '/projects/new',
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      Session.set('projectAction', 'Add');
+      return 'projectForm';
+    }
+  });
 
-  '/projects': function( ){
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'projects';
-  },
+  this.route('projectShow', {
+    path: '/projects/:id',
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+    
+      var id = this.params.id;
+      var project = Projects.findOne(id);
+      if(project && project.user == Meteor.userId()) {
+        // access parameters in order a function args too
+        Session.set('currentProjectId', id);
+        return 'projectShow';
+      } else {
+        return NOT_FOUND;
+      }
+    }
+  });
 
-  '/projects/new': function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('projectAction', 'Add');
-	return 'projectForm';
-  },
+  this.route('projectForm', {
+    path: '/projects/edit/:id',
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      var id = this.params.id;
+      Session.set('projectAction', 'Edit');
+      Session.set('projectEditId', id);
+      return 'projectForm';
+    }
+  });
+    
+  this.route('history', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'history';
+    }
+  });
 
-  '/projects/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
+  this.route('settings', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'settings';
+    }
+  });
 
-	var project = Projects.findOne(id);
-	if(project && project.user == Meteor.userId()) {
-	  // access parameters in order a function args too
-	  Session.set('currentProjectId', id);
-	  return 'projectShow';
-	} else {
-	  return NOT_FOUND;
-	}
-  },
+  this.route('about');
 
-  '/projects/edit/:id': function(id) {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	Session.set('projectAction', 'Edit');
-	Session.set('projectEditId', id);
-	return 'projectForm';
-  },
+  this.route('todo', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'todo';
+    }
+  });
 
-  '/history' : function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'history';
-  },
-
-  '/settings' : function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'settings';
-  },
-
-  '/about' : function() {
-	return 'about';
-  },
-
-  '/todo' : function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'todo';
-  },
-
-  '/migrate' : function() {
-	if(Meteor.user() == null) {
-	  return LOGIN_PAGE;
-	}
-	return 'migrate';
-  },
-
-  '*': NOT_FOUND
+  this.route('migrate', {
+    data: function() {
+      if(Meteor.user() == null) {
+        this.redirect(LOGIN_PAGE);
+      }
+      return 'migrate';
+    }
+  });
+  
+  this.route('notFound', {
+    path: '*'
+  });
 });
 
-Meteor.Router.beforeRouting = function() {
+Router.configure({
+  layoutTemplate: 'layout',
+  notFoundTemplate: NOT_FOUND
+});
+
+Router.onRun(function() {
   Session.set('flashMessage', null);
   Session.set('taskEditId', null);
   Session.set('taskAction', null);
@@ -131,4 +170,4 @@ Meteor.Router.beforeRouting = function() {
   Session.set('dateFormatExample', null);
   Session.set('timeSpent', null);
   Session.set('projectTaskTimes', null);
-};
+});

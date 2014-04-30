@@ -13,7 +13,7 @@
         {{#if doing}}
           <button class="btn btn-danger" data-action="stopdoing" data-id="{{_id}}">Stop doing</button>
         {{else}}
-          <button class="btn btn-primary"data-action="startdoing" data-id="{{_id}}">Start doing</button>
+          <button class="btn btn-primary" data-action="startdoing" data-id="{{_id}}">Start doing</button>
         {{/if}}
         </p>
       {{/if}}
@@ -47,21 +47,17 @@
         <p>
           <span id="start-time" class="input-append">
             <input type="text" data-format="{{dateTimeFormat}}" id="start-time-input" name="start" placeholder="Enter start time" />
-            {{#constant}}
-              <span class="add-on">
-                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-              </span>
-            {{/constant}}
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+            </span>
           </span>
         </p>
         <p>
           <span id="end-time" class="input-append">
             <input type="text" data-format="{{dateTimeFormat}}" name="end" id="end-time-input" placeholder="Enter end time" />
-            {{#constant}}
-              <span class="add-on">
-                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-              </span>
-            {{/constant}}
+            <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+            </span>
           </span>
         </p>
         <p><textarea name="note" placeholder="What have you been doing?" rows="5"></textarea></p>
@@ -81,20 +77,16 @@
     <form id="edit-tasktime-form">
       <span id="edit-start-time-picker" class="input-append">
         <input type="text" data-format="{{dateTimeFormat}}" name="start-time" id="edit-start-time" />
-        {{#constant}}
-          <span class="add-on">
-            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-          </span>
-        {{/constant}}
+        <span class="add-on">
+          <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+        </span>
       </span>
     -
       <span id="edit-end-time-picker" class="input-append">
         <input type="text" data-format="{{dateTimeFormat}}" name="end-time" id="edit-end-time" />
-        {{#constant}}
-          <span class="add-on">
-            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-          </span>
-        {{/constant}}
+        <span class="add-on">
+          <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+        </span>
       </span>
       <p><textarea name="note" placeholder="What have you been doing?"></textarea></p>
     </form>

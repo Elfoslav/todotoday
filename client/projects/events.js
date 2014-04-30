@@ -24,7 +24,7 @@ Template.projectForm.events({
 			Meteor.call('updateProject', data, taskIds, function(err, data) {
 				if(!err) {
 					Session.set('flashMessage', 'Project updated.');
-					Meteor.Router.to('/projects/' + projectId);
+					Router.go('/projects/' + projectId);
 				}
 			});
 		} else {
@@ -32,7 +32,7 @@ Template.projectForm.events({
 			Meteor.call('createProject', projectName, taskIds, function(err, projectId) {
 				if(!err) {
 					Session.set('flashMessage', 'Project created.');
-					Meteor.Router.to('/projects/' + projectId);
+					Router.go('/projects/' + projectId);
 				}
 			});
 		}

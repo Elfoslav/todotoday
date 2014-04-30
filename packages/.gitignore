@@ -4,3 +4,5 @@ font-awesome
 moment
 bootstrap-datepicker
 bootstrap-datetimepicker
+iron-router
+blaze-layout

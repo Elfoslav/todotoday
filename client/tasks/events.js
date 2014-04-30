@@ -28,7 +28,7 @@ Template.taskForm.events({
       if(Session.get('taskAction') == 'Add') {
         console.log('data:', data);
         Meteor.call('insertTask', data, function(err, taskId) {
-          Meteor.Router.to('/tasks/'+taskId);
+          Router.go('/tasks/'+taskId);
         });
       }
       if(Session.get('taskAction') == 'Edit') {
@@ -99,10 +99,10 @@ function redirectTask() {
   var id = getURLParameter('id');
   if(id !== 'null') {
     //back to task
-    Meteor.Router.to('/tasks/'+id);
+    Router.go('/tasks/'+id);
   }
   else {
-    Meteor.Router.to('/tasks');
+    Router.go('/tasks');
   }
 }
 
@@ -125,7 +125,7 @@ function processTaskAction(e) {
         Meteor.call('deleteTask', data.id);
         Session.set('flashMessage', 'Task removed');
         if(Session.get('currentTaskId'))
-          Meteor.Router.to('/tasks');
+          Router.go('/tasks');
       }
       break;
     case 'done' :
