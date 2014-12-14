@@ -5,14 +5,12 @@
 
 accounts-ui
 accounts-password
-bootstrap
 less
 jquery
 spiderable
 standard-app-packages
-bootstrap-datepicker
-bootstrap-datetimepicker
-font-awesome
-moment
-page-js-ie-support
-iron-router
+tsega:bootstrap3-datetimepicker
+natestrauser:font-awesome
+rzymek:moment
+iron:router
+mizzao:bootstrap-3

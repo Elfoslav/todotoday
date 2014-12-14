@@ -9,18 +9,21 @@
 <template name="layout">
 	{{>googleAnalytics}}
   <div class="container">
-		{{#unless isPageNotFound}}
-	
-		{{/unless}}
-	
 		<br>
 		{{> loginButtons}}
 		<br><br>
-	
-		<div class="navbar">
-			<div class="navbar-inner">
-			<!--<a class="brand" href="#">Title</a>-->
-			<ul class="nav">
+
+		<div class="navbar navbar-default">
+		  <!--<a class="brand" href="#">Title</a>-->
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
 				<li><a href="/">Home</a></li>
 				<li><a href="/tasks/new">+ Add task</a></li>
 				<li><a href="/tasks">Show tasks</a></li>
@@ -31,17 +34,17 @@
 				<li><a href="/about">About</a></li>
 				<li><a href="/todo">Improve TodoToday</a></li>
 			</ul>
-			</div>
+		  </div>
 		</div>
-	
+
 		{{> flashMessage }}
-	
+
 		<p>
 			All tasks: {{allTasksCount}} | Your tasks: {{userTasksCount}}
 			{{#if totalDayTime}}| Total day time: {{totalDayTime}}h {{/if}}
 			{{#if currentTask}}| {{currentTask}} {{/if}}
 		</p>
-	
+
 		{{> yield}}
   </div>
 
@@ -53,7 +56,10 @@
 
 <template name="flashMessage">
 	{{#if flashMessage}}
-	  <p class="alert flash-message">{{flashMessage}}</p>
+	  <div class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		{{flashMessage}}
+	  </div>
 	{{/if}}
 </template>
 

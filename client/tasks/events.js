@@ -9,19 +9,22 @@ Template.taskForm.events({
   'click #submit' : function(e) {
     e.preventDefault();
 
-    if($('#name').val()) {
+    if ($('#name').val()) {
       name = $('#name').val();
       description = $('#description').val();
       //JSON data
       data = $('#frm-task').serializeObject();
       console.log(data);
       //if checkbox done is not checked, set default done = false
-      if(!data.done) {
+      if (!data.done) {
         data.done = false;
       } else {
         data.done = true;
       }
-      if(data.dueDate) {
+      if (data.project == '0') {
+        data.project = null;
+      }
+      if (data.dueDate) {
         data.dueDate = moment(data.dueDate, Session.get('dateFormat')).toDate();
       }
 
@@ -66,7 +69,7 @@ Template.showTask.events({
     var start = $('#start-time-input').val();
     var end = $('#end-time-input').val();
     var note = $('#time-form').find('textarea[name="note"]').val();
-    
+
     if(!(start && end)) {
       alert('Fill in start and end time');
       return;
@@ -85,6 +88,7 @@ Template.showTask.events({
         Session.set('flashMessage', 'Task time saved.');
         $('#start-time-input').val('');
         $('#end-time-input').val('');
+        $('#time-form textarea[name="note"]').val('');
       } else {
         Session.set('flashMessage', 'Task time could not be saved. Try again.');
       }
@@ -181,10 +185,13 @@ function processTaskAction(e) {
     //open edit task time modal
     case 'edit-tasktime' :
       var $taskTimeRow = $(elem).closest('.tasktime');
+      $('#edit-start-time, #edit-end-time').datetimepicker({
+        format: getTimePickerDateTimeFormat(Session.get('dateFormat'), Session.get('timeFormat'))
+      });
       //fill in start time in modal dialog
-      $('#edit-start-time-picker').data('datetimepicker').setLocalDate(moment($('input[data-type="start"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
-      $('#edit-end-time-picker').data('datetimepicker').setLocalDate(moment($('input[data-type="end"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
-      
+      $('#edit-start-time').data('DateTimePicker').setDate(moment($('input[data-type="start"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
+      $('#edit-end-time').data('DateTimePicker').setDate(moment($('input[data-type="end"]', $taskTimeRow).val(), getMomentDateTimeFormat()).toDate());
+
       var taskTime = TaskTimes.findOne(data.id);
       $('#edit-tasktime-form textarea[name="note"]').val(taskTime.note);
       $('#save-tasktime-btn').data('id', data.id);
@@ -196,7 +203,7 @@ function processTaskAction(e) {
       var startDate = moment($start.val(), format);
       var endDate = moment($end.val(), format);
       var note = $('#edit-tasktime-form textarea[name="note"]').val();
-      
+
       if(!startDate.isValid()) {
         alert('Start date-time is invalid. Required format is "'+ format + '"');
         break;

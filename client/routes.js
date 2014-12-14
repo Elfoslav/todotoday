@@ -2,160 +2,115 @@
 NOT_FOUND = 'notFound';
 LOGIN_PAGE = 'login';
 
-Router.map(function() {
-  this.route('home', { path: '/'},{ data: function() { console.log('home'); } });
-  
-  this.route('login');
+var requiredLogin = function() {
+  if (!Meteor.user()) {
+    this.render(LOGIN_PAGE);
+  } else {
+    this.next();
+  }
+};
 
-  this.route('tasks', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'tasks';
-    }
-  });
+Router.onBeforeAction(requiredLogin, {
+  //only: [ 'tasks', 'taskForm', 'showTask', 'projects', 'projectForm', 'history', 'settings', 'todo' ]
+  except: [ 'home', 'about' ]
+});
 
-  this.route('taskForm', {
-    path: '/tasks/new',
-    data: function() {
-      Session.set('taskAction', 'Add');
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'taskForm';
-    }
-  });
+Router.route('/', function() {
+  this.render('home');
+}, {
+  name: 'home'
+});
 
-  this.route('showTask', {
-    path: '/tasks/:id',
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-    
-      var id = this.params.id;
-      task = Tasks.findOne(id);
-      if(task && task.user == Meteor.userId()) {
-        // access parameters in order a function args too
-        Session.set('currentTaskId', id);
-        return 'showTask';
-      } else {
-        return NOT_FOUND;
-      }
-    }
-  });
+Router.route('/login', function() {
+  this.render('login');
+});
 
-  this.route('taskForm', {
-    path: '/tasks/edit/:id',
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      var id = this.params.id;
-      Session.set('taskEditId', id);
-      Session.set('taskAction', 'Edit');
-      return 'taskForm';
-    }
-  });
-    
-  this.route('projects', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'projects';
-    }
-  });
+Router.route('/tasks', {
+  action: function() {
+    this.render('tasks');
+  }
+});
 
-  this.route('projectForm', {
-    path: '/projects/new',
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      Session.set('projectAction', 'Add');
-      return 'projectForm';
-    }
-  });
+Router.route('/tasks/new', function() {
+  Session.set('taskAction', 'Add');
+  this.render('taskForm');
+});
 
-  this.route('projectShow', {
-    path: '/projects/:id',
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-    
-      var id = this.params.id;
-      var project = Projects.findOne(id);
-      if(project && project.user == Meteor.userId()) {
-        // access parameters in order a function args too
-        Session.set('currentProjectId', id);
-        return 'projectShow';
-      } else {
-        return NOT_FOUND;
-      }
-    }
-  });
+Router.route('/tasks/:id', function() {
+  var id = this.params.id;
+  task = Tasks.findOne(id);
+  if(task && task.user == Meteor.userId()) {
+    // access parameters in order a function args too
+    Session.set('currentTaskId', id);
+    this.render('showTask');
+  } else {
+    this.render(NOT_FOUND);
+  }
+});
 
-  this.route('projectForm', {
-    path: '/projects/edit/:id',
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      var id = this.params.id;
-      Session.set('projectAction', 'Edit');
-      Session.set('projectEditId', id);
-      return 'projectForm';
-    }
-  });
-    
-  this.route('history', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'history';
-    }
-  });
+Router.route('/tasks/edit/:id', function() {
+  var id = this.params.id;
+  Session.set('taskEditId', id);
+  Session.set('taskAction', 'Edit');
+  this.render('taskForm');
+});
 
-  this.route('settings', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'settings';
-    }
-  });
+Router.route('projects', function() {
+  this.render('projects');
+});
 
-  this.route('about');
+Router.route('/projects/new', {
+  action: function() {
+    Session.set('projectAction', 'Add');
+    this.render('projectForm');
+  }
+});
 
-  this.route('todo', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'todo';
-    }
-  });
+Router.route('/projects/:id', function() {
+  var id = this.params.id;
+  var project = Projects.findOne(id);
+  if(project && project.user == Meteor.userId()) {
+    // access parameters in order a function args too
+    Session.set('currentProjectId', id);
+    this.render('projectShow');
+  } else {
+    this.render(NOT_FOUND);
+  }
+});
 
-  this.route('migrate', {
-    data: function() {
-      if(Meteor.user() == null) {
-        this.redirect(LOGIN_PAGE);
-      }
-      return 'migrate';
-    }
-  });
-  
-  this.route('notFound', {
-    path: '*'
-  });
+Router.route('/projects/edit/:id', function() {
+  var id = this.params.id;
+  Session.set('projectAction', 'Edit');
+  Session.set('projectEditId', id);
+  this.render('projectForm');
+});
+
+Router.route('/history', function() {
+  this.render('history');
+});
+
+Router.route('/settings', function() {
+  this.render('settings');
+});
+
+Router.route('/about', function() {
+  this.render('about');
+});
+
+Router.route('/todo', function() {
+  this.render('todo');
+});
+
+Router.route('notFound', {
+  path: '*',
+  action: function() {
+    console.log('page not found');
+  }
 });
 
 Router.configure({
   layoutTemplate: 'layout',
+  loadingTemplate: 'loading',
   notFoundTemplate: NOT_FOUND
 });
 
@@ -170,4 +125,7 @@ Router.onRun(function() {
   Session.set('dateFormatExample', null);
   Session.set('timeSpent', null);
   Session.set('projectTaskTimes', null);
+  console.log('onRun before next');
+  this.next();
+  console.log('onRun after next');
 });

@@ -1,25 +1,27 @@
 <template name="projectForm">
-	<h1>{{projectAction}} project</h1>
-	<form id="projectForm" class="inline-form">
-		<label for="name">Project name *:</label>
-		<input type="text" name="name" id="name" />
-		{{#if tasks.count}}
-			<h3>Select project tasks:</h3>
-			<table class="table">
-				<tr>
-					<td><input type="checkbox" class="select-all" /></td>
-					<td>&larr; Select/unselect all</td>
-				</tr>
-				{{#each tasks}}
-					<tr>
-						<td><input type="checkbox" class="projectTask" value="{{_id}}" name="{{name}}" id="{{_id}}" /></td>
-						<td><a href="/tasks/{{_id}}">{{name}}</a></td>
-					</tr>
-				{{/each}}
-			</table>
-		{{else}}
-			<br />
-		{{/if}}
-		<input type="submit" name="submit" id="submit" value="Save" />
-	</form>
+  <h1>{{projectAction}} project</h1>
+  <form id="projectForm" class="form-inline">
+    <div class="form-group">
+      <label for="name">Project name *:</label>
+      <input class="form-control" type="text" name="name" id="name" />
+    </div>
+    {{#if tasks.count}}
+      <h3>Select project tasks:</h3>
+      <table class="table">
+        <tr>
+          <td><input type="checkbox" class="select-all" /></td>
+          <td>&larr; Select/unselect all</td>
+        </tr>
+        {{#each tasks}}
+          <tr>
+            <td><input type="checkbox" class="projectTask" value="{{_id}}" name="{{name}}" id="{{_id}}" /></td>
+            <td><a href="/tasks/{{_id}}">{{name}}</a></td>
+          </tr>
+        {{/each}}
+      </table>
+    {{else}}
+      <br />
+    {{/if}}
+    <input class="btn btn-primary" type="submit" name="submit" id="submit" value="Save" />
+  </form>
 </template>

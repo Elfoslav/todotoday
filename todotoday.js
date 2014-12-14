@@ -1,4 +1,3 @@
-
 if (Meteor.isClient) {
 
   Handlebars.registerHelper("dump", function(optionalValue) {
@@ -11,8 +10,10 @@ if (Meteor.isClient) {
     console.log(optionalValue);
   });
 
-  Template.flashMessage.flashMessage = function() {
-    return Session.get('flashMessage');
-  }
+  Template.flashMessage.helpers({
+    flashMessage: function() {
+      return Session.get('flashMessage');
+    }
+  });
 
 }

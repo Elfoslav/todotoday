@@ -1,89 +1,78 @@
 /* CSS declarations go here */
-
-h1 {
-	font-size: 1.7em;
-	line-height: 1.5em;
-}
-h2 {
-	font-size: 1.5em;
-	line-height: 1.3em;
-}
-h3 {
-	font-size: 1.3em;
-	line-height: 1.1em;
+.center {
+  text-align: center;
 }
 
 .todo-all, .todo-today {
-	width: 48%;
-	text-align: center;
+  width: 48%;
+  text-align: center;
 }
 .todo-all {
-	float: left;
+  float: left;
 }
 .todo-today {
-	float: right;
+  float: right;
 }
 .move-selected {
-	float: left;
-	position: relative;
-	height: 100%;
-	width: 20%;
-	text-align: center;
-	.arrows {
-		font-size: 2em;
-		a {
-			display: block;
-		}
-		a:hover {
-			color: green;
-			background: #eee;
-			text-decoration: none;
-		}
-	}
-	.inner {
-		vertical-align: middle;
-	}
+  float: left;
+  position: relative;
+  height: 100%;
+  width: 20%;
+  text-align: center;
+  .arrows {
+    font-size: 2em;
+    a {
+      display: block;
+    }
+    a:hover {
+      color: green;
+      background: #eee;
+      text-decoration: none;
+    }
+  }
+  .inner {
+    vertical-align: middle;
+  }
 }
 .tasks {
-	position: relative;
-	.task-name {
-		width: 80%;
-	}
+  position: relative;
+  .task-name {
+    width: 80%;
+  }
 }
 a [class^="icon-"]:before, [class*=" icon-"]:before {
-	cursor: pointer;
+  cursor: pointer;
 }
-.icon-ok {
-	color: green;
+.glyphicon-ok {
+  color: green;
 }
-.icon-remove {
-	color: red;
+.glyphicon-remove {
+  color: red;
 }
 .footer {
-	margin-top: 20px;
-	text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 .task-name {
-	font-size: 1.6em;
-	line-height: 1.6em;
+  font-size: 1.6em;
+  line-height: 1.6em;
 }
 .task-day {
-	font-size: 1.2em;
-	line-height: 1.2em;
+  font-size: 1.2em;
+  line-height: 1.2em;
 }
 
 input.hide {
-	display: none;
+  display: none;
 }
 
 /** bootstrap addon **/
 .table tbody tr.info > th {
-	background-color: #d9edf7;
+  background-color: #d9edf7;
 }
 
 #edit-tasktime-form {
-	textarea {
-		width: 94%;
-		height: 100px;
-	}
+  textarea {
+    height: 100px;
+  }
 }
