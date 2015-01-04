@@ -177,6 +177,7 @@ function processTaskAction(e) {
           if(app.doingInterval) {
             Meteor.clearInterval(app.doingInterval);
             app.doingInterval = null;
+            Session.set('timeSpent', 0);
           }
         }
         console.log('Server end date: ', data);

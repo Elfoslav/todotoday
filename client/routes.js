@@ -116,12 +116,9 @@ Router.configure({
 
 Router.onRun(function() {
   Session.set('flashMessage', null);
-  Session.set('taskEditId', null);
   Session.set('taskAction', null);
   Session.set('projectAction', null);
   Session.set('projectEditId', null);
-  Session.set('currentTaskId', null);
-  Session.set('currentProjectId', null);
   Session.set('dateFormatExample', null);
   Session.set('timeSpent', null);
   Session.set('projectTaskTimes', null);
